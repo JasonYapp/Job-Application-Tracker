@@ -4,3 +4,7 @@
 # React Router
 /.react-router/
 /build/
+
+# Exclude Personal Project Notes
+PROJECT_NOTES.md 
+
