@@ -10,11 +10,24 @@
 }
 
 .nav {
-    background-color: rgb(241, 143, 143);
+    background-color: white;
     color: black;
     display: grid;
     grid-template-columns: 1fr auto 1fr; 
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100; /* Ensures it stays above other content */
+}
+
+.nav::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 30%;
+    right: 30%;
+    height: 1px;
+    background-color: rgb(189, 189, 189); /* remove line when finished with site*/
 }
 
 .nav li{
@@ -52,6 +65,6 @@
 }
 
 .navLink:hover {
-    background-color: blueviolet;
+    background-color: rgb(223, 201, 243);
     border-radius: 8px;
 }

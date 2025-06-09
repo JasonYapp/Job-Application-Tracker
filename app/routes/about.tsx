@@ -1,7 +1,3 @@
-import Navbar from "~/components/navbar/navbar";
-
-
-
 
 const About = () => {
     return(

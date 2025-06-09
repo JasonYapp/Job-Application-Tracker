@@ -1,4 +1,14 @@
-//after login success!!
-// import { useNavigate } from "react-router";
-// const navigate = useNavigate();
-// navigate("/dashboard");
+const Login = () => {
+    return(
+        
+        <>
+            <h1>Login page</h1>
+            
+            <p>Email, password, google/apple sign in</p>
+        </>
+       
+    );
+}
+
+
+export default Login;

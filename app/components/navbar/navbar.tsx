@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router";
 import './navbar.css';
 
-import About from '../../routes/about';
 
 
 const Navbar = () => {
@@ -12,19 +11,19 @@ const Navbar = () => {
             <Link to="/" className="MissionEmployment">Mission Employment</Link>
             <ul className="nav-center">
                 <li>
-                    <Link className="navLink" to="/about">About</Link>
+                    <Link className="navLink" to="/features">Features</Link>
                 </li>
                 <li>
-                    <Link className="navLink" to="/">Home</Link>
+                    <Link className="navLink" to="/about">About</Link>
                 </li> 
             </ul>
 
              <ul className="nav-right">
                 <li>
-                    <Link className="navLink" to="/">Log In</Link>
+                    <Link className="navLink" to="/login">Log In</Link>
                 </li>
                 <li>
-                    <Link className="navLink" to="/">Sign Up For Free</Link>
+                    <Link className="navLink" to="/signup">Sign Up For Free</Link>
                 </li>
             </ul>
         </nav>
