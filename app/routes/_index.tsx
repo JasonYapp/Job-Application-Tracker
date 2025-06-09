@@ -3,13 +3,13 @@ import Navbar from "~/components/navbar/navbar";
 
 
 
-const About = () => {
+const Home = () => {
     return(
         
-        <h1>About page</h1>
+        <h1>Home page</h1>
        
     );
 }
 
 
-export default About;
+export default Home;
