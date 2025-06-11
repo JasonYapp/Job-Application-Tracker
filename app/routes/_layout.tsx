@@ -6,8 +6,7 @@ export default function Layout() {
 
   const location = useLocation();
   
-  // Define which pages should show the footer
-  const pagesWithFooter = ['/', '/about', '/features']; // Add your desired pages
+  const pagesWithFooter = ['/', '/about', '/features']; 
   
   const showFooter = pagesWithFooter.includes(location.pathname);
 

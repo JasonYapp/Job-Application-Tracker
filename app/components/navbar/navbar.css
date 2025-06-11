@@ -58,13 +58,13 @@
     height: 60px;
     display: flex;
     align-items: center;
-    transition: background-color 0.3s;
+    transition: background-color 0.4s;
     text-decoration: none;
     color: inherit;
     border-radius: 8px;
 }
 
 .navLink:hover {
-    background-color: rgb(223, 201, 243);
+    background-color: #C8D9E6;
     border-radius: 8px;
 }
