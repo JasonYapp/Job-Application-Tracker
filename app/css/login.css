@@ -1,0 +1,51 @@
+.container {
+    margin: 0 auto;
+    max-width: 600px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.95); 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+header {
+    text-align: left;
+    font-size: 40px;
+    font-weight: bold;
+    color: #2F4156;
+    padding-top: 50px;
+    padding-left: 50px;
+}
+
+.tagline {
+    padding-left: 50px;
+    color: #567C8D;
+    max-width: 600px;
+    text-align: left;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    padding: auto 20px;
+    padding-bottom: 40px;
+    margin-left: 50px;
+    gap: 20px; /* adds space between the inputs */
+    width: 80%; /* optional, controls width of inputs */
+}
+
+.submitButton {
+    width: 500px;
+    margin: 0 auto;
+    color: #2F4156;
+    text-align: center;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    border-radius: 20px;
+    border: 1px solid #2F4156; 
+    background-color: #C8D9E6; 
+    cursor: pointer;
+}

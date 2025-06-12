@@ -11,7 +11,7 @@
 
 .nav {
     background-color: white;
-    color: black;
+    color: #2F4156;
     display: grid;
     grid-template-columns: 1fr auto 1fr; 
     align-items: center;
