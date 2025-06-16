@@ -41,10 +41,14 @@
 .submitButton {
     width: 85%;
     margin: 0 auto;
+    margin-bottom: 1.5rem;
+}
+
+.submitButton button {
+    width: 100%;
     color: #2F4156;
     text-align: center;
     font-size: 1.3rem;
-    margin-bottom: 1.5rem;
     line-height: 1.7;
     border-radius: 20px;
     border: 1px solid #2F4156; 
