@@ -1,0 +1,64 @@
+import '../css/login.css';
+
+
+
+const handleSubmit = async () => {
+
+}
+
+const Login = () => {
+    return(
+        
+        <>
+            <section>
+                <div style={{ paddingTop: '8rem' }}>
+                    <div className='loginContainer'>
+                        <h1 className="header">Login</h1>
+
+                        <p className="tagline">Please enter your details to login to your account</p>
+
+                        
+
+                        <div className="form">
+                            <input
+                                type="email"
+                                name="email"
+                                // value={formData.email}
+                                // onChange={handleInputChange}
+                                placeholder="Enter your email"
+                                onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                            />
+
+                            <input
+                                type="password"
+                                name="password"
+                                // value={formData.password}
+                                // onChange={handleInputChange}
+                                placeholder="Enter your password"
+                                onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                            />
+                        </div>
+
+                        <div className='submitButton'>
+                            <button
+                                type="button"
+                                onClick={handleSubmit}
+                                // disabled={isLoading}
+                            >
+                                Log in
+                            </button>
+                        </div>
+
+                        <h2> or </h2>
+  
+                    </div>
+                </div>
+
+            </section>
+        </>
+       
+    );
+}
+
+
+export default Login;

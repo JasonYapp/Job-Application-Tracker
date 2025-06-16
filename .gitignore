@@ -8,3 +8,5 @@
 # Exclude Personal Project Notes
 PROJECT_NOTES.md 
 
+#Remove .env!!
+.env
