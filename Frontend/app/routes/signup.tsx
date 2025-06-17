@@ -5,32 +5,111 @@ import '../css/signup.css';
 
 
 
-const Signup = () => {
-
+const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [phone, setPhone]= useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    
     const navigate = useNavigate();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        console.log("Email: " + email + "Password: " + password);
+        setError('');
+        setLoading(true);
 
-        // navigate('/routehere');
-    }
+        // Validate passwords match
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            setLoading(false);
+            return;
+        }
 
-    return(
-        
+        // Validate password strength (optional)
+        if (password.length < 6) {
+            setError('Password must be at least 6 characters long');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            // Make API call to your backend
+            const response = await fetch('http://localhost:5000/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                    name: name,
+                    phone: phone
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Success - redirect to login or dashboard
+                console.log('User created successfully:', data);
+                navigate('/login'); // or wherever you want to redirect
+            } else {
+                // Handle errors from backend
+                setError(data.message || 'Failed to create account');
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            setError('Network error. Please check if your backend is running.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
         <>
             <section>
                 <div style={{ paddingTop: '8rem' }}>
                     <div className='signUpContainer'>
                         <h1 className="header">Sign Up</h1>
-
                         <p className="tagline">Please enter your details to sign up!</p>
-
                         
+                        {error && (
+                            <div className="error-message" style={{ 
+                                color: 'red', 
+                                marginBottom: '1rem',
+                                padding: '0.5rem',
+                                backgroundColor: '#ffe6e6',
+                                borderRadius: '4px'
+                            }}>
+                                {error}
+                            </div>
+                        )}
+
                         <form onSubmit={handleSubmit}>
                             <div className="form">
+                                <input
+                                    type="name"
+                                    name="name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    placeholder="Enter your first name"
+                                    required
+                                    disabled={loading}
+                                />
+
+                                <input
+                                    type="phone"
+                                    name="phone"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    placeholder="Enter your phone number"
+                                    required
+                                    disabled={loading}
+                                />
+
                                 <input
                                     type="email"
                                     name="email"
@@ -38,6 +117,7 @@ const Signup = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Enter your email"
                                     required
+                                    disabled={loading}
                                 />
 
                                 <input
@@ -46,24 +126,32 @@ const Signup = () => {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Enter your password"
+                                    required
+                                    disabled={loading}
+                                />
+
+                                <input
+                                    type="password"
+                                    name="confirmPassword"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    placeholder="Re-enter your password"
+                                    required
+                                    disabled={loading}
                                 />
                             </div>
                         
                             <div className='submitButton'>
-                                <button type="submit"> Sign Up </button>
+                                <button type="submit" disabled={loading}>
+                                    {loading ? 'Creating Account...' : 'Sign Up'}
+                                </button>
                             </div>
                         </form>
-
-                        <h2> or </h2>
-  
                     </div>
                 </div>
-
             </section>
         </>
-       
     );
-}
+};
 
-
-export default Signup;
+export default SignUp;
