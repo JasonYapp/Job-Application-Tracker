@@ -3,6 +3,7 @@ const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -75,6 +76,78 @@ app.post('/api/auth/signup', async (req, res) => {
             userId: result.insertId
         });
 
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ 
+            message: 'Internal server error',
+            details: error.message 
+        });
+    }
+});
+
+
+// Login route
+app.post('/api/auth/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+        return res.status(400).json({ 
+            message: 'Email and password are required' 
+        });
+    }
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+
+        // Get user with hashed password
+        const [users] = await connection.execute(
+            'SELECT id, email, password_hash, first_name FROM users WHERE email = ?',
+            [email]
+        );
+
+        await connection.end();
+
+        // Check if user exists
+        if (users.length === 0) {
+            return res.status(401).json({ 
+                message: 'Invalid email or password' 
+            });
+        }
+
+        const user = users[0];
+
+         // Compare password with hashed password
+        const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ 
+                message: 'Invalid email or password' 
+            });
+        }
+
+
+        // Generate JWT token 
+        const token = jwt.sign(
+            { 
+                userId: user.id, 
+                email: user.email 
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        res.status(200).json({
+            message: 'Login successful',
+            token: token,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.first_name
+            }
+        });
+
+  
     } catch (error) {
         console.error('Database error:', error);
         res.status(500).json({ 

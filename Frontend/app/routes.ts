@@ -7,7 +7,10 @@ export default [
     route("about", "routes/about.tsx"),
     route("login", "routes/login.tsx"),
     route("signup", "routes/signup.tsx"),
-    // Add other routes here as needed
-  ])
+    // Add more public routes here. ONLY PUBLIC
+  ]),
+
+  // Routes WITHOUT navbar (not wrapped in layout)
+  route("dashboard", "routes/loggedin/dashboard.tsx"),
 
 ] satisfies RouteConfig;

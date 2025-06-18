@@ -71,7 +71,7 @@ const SignUp = () => {
     return (
         <>
             <section>
-                <div style={{ paddingTop: '8rem' }}>
+                <div style={{ paddingTop: '4rem' }}>
                     <div className='signUpContainer'>
                         <h1 className="header">Sign Up</h1>
                         <p className="tagline">Please enter your details to sign up!</p>
@@ -147,6 +147,8 @@ const SignUp = () => {
                                 </button>
                             </div>
                         </form>
+
+                        <h2> or </h2>
                     </div>
                 </div>
             </section>

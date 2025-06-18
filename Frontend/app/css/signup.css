@@ -30,12 +30,17 @@
 .form {
     display: flex;
     flex-direction: column;
-    
     padding: auto 20px;
     padding-bottom: 40px;
     margin-left: 50px;
-    gap: 20px; /* adds space between the inputs */
+    gap: 30px; /* adds space between the inputs */
     width: 80%; /* optional, controls width of inputs */
+}
+
+.form input {
+    border: 1px solid rgb(216, 216, 216);
+    border-radius: 6px;
+    padding: 5px;
 }
 
 .submitButton {
