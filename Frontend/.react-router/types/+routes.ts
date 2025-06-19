@@ -28,12 +28,18 @@ type Pages = {
   "/dashboard": {
     params: {};
   };
+  "/settings": {
+    params: {};
+  };
+  "/progressLine": {
+    params: {};
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/features" | "/about" | "/login" | "/signup" | "/dashboard";
+    page: "/" | "/features" | "/about" | "/login" | "/signup" | "/dashboard" | "/settings" | "/progressLine";
   };
   "routes/_layout.tsx": {
     id: "routes/_layout";
@@ -59,8 +65,20 @@ type RouteFiles = {
     id: "routes/signup";
     page: "/signup";
   };
+  "routes/loggedin/_layout.tsx": {
+    id: "routes/loggedin/_layout";
+    page: "/dashboard" | "/settings" | "/progressLine";
+  };
   "routes/loggedin/dashboard.tsx": {
     id: "routes/loggedin/dashboard";
     page: "/dashboard";
+  };
+  "routes/loggedin/settings.tsx": {
+    id: "routes/loggedin/settings";
+    page: "/settings";
+  };
+  "routes/loggedin/progressLine.tsx": {
+    id: "routes/loggedin/progressLine";
+    page: "/progressLine";
   };
 };

@@ -10,7 +10,12 @@ export default [
     // Add more public routes here. ONLY PUBLIC
   ]),
 
-  // Routes WITHOUT navbar (not wrapped in layout)
-  route("dashboard", "routes/loggedin/dashboard.tsx"),
+  // Routes with logged-in nav bar
+  layout("routes/loggedin/_layout.tsx" , [
+    route("dashboard", "routes/loggedin/dashboard.tsx"),
+    route("settings", "routes/loggedin/settings.tsx"),
+    route("progressLine", "routes/loggedin/progressLine.tsx"),
+  ]),
+  
 
 ] satisfies RouteConfig;

@@ -1,9 +1,17 @@
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from 'react-router';
+import DashNav from "../../components/dashNav/dashNav";
 
-export default function AuthLayout() {
+export default function loggedInLayout() {
+
   return (
-    <main>
-      <Outlet />
-    </main>
+    <>
+      <DashNav />
+      <main>
+        <Outlet />
+      </main>
+      
+    </>
   );
 }
+
+
