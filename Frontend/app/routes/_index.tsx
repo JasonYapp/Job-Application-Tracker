@@ -6,7 +6,7 @@ const Home = () => {
         
         <>
 
-        <div style={{ paddingTop: '2rem' }}>
+        <div style={{ paddingTop: '6rem' }}>
             <div className="container">
 
                 <section>
@@ -18,11 +18,11 @@ const Home = () => {
                     </div>
                 </section>
 
-                <section>
+                <section className='separate'>
                     <p> Photo view of Kanban timeline here?</p>
                 </section>
 
-                <section>
+                <section className='separate'>
                     <p> One more image off to the side, with text alongside it to explain one more benefit. </p>
                     <p> "A tool to keep you organised. The days of being overwhelmed are gone. With text reminders and calendar integration, never miss another opportunity.</p>
                 </section>

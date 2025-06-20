@@ -1,0 +1,65 @@
+.footer {
+    position: relative;
+    padding: 20px;
+    text-align: center;
+    margin-top: 100px;
+
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 30%;
+    right: 30%;
+    height: 1px;
+    background-color: rgb(189, 189, 189); /* remove line when finished with site*/
+}
+
+.columns {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column on mobile */
+    gap: 40px;
+    margin-top: 30px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+        
+/* Responsive breakpoints */
+@media (min-width: 768px) {
+    .columns {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
+    }
+}
+        
+@media (min-width: 1024px) {
+    .columns {
+        grid-template-columns: repeat(4, 1fr); /* 4 columns on desktop */
+    }
+}
+
+
+.mission-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.mission-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2F4156;
+    margin-bottom: 15px;
+}
+
+.mission-text {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+
+
+
+
