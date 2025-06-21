@@ -3,7 +3,7 @@
     padding: 20px;
     text-align: center;
     margin-top: 100px;
-
+    padding-bottom: 100px;
 }
 
 .footer::before {
@@ -13,15 +13,15 @@
     left: 30%;
     right: 30%;
     height: 1px;
-    background-color: rgb(189, 189, 189); /* remove line when finished with site*/
+    background-color: rgb(189, 189, 189); 
 }
 
 .columns {
     display: grid;
     grid-template-columns: 1fr; /* Single column on mobile */
-    gap: 40px;
+    gap: 100px;
     margin-top: 30px;
-    max-width: 1200px;
+    max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
     text-align: left;
@@ -44,6 +44,7 @@
 .mission-column {
     display: flex;
     flex-direction: column;
+    width: 300px;
 }
 
 .mission-title {
@@ -58,6 +59,25 @@
     font-size: 0.9rem;
     line-height: 1.6;
 }
+
+
+.column-section {
+    
+}
+
+
+.column-section li{
+    color: #666;
+}
+
+h3 {
+    color: #567C8D;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 16px;
+}
+
+
 
 
 

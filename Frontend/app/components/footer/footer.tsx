@@ -9,7 +9,7 @@ const Footer = () => {
                 <div className='mission-column'>
                     <div className='mission-title'> Mission Employment </div>
                         <div className='mission-text'> Connecting talented individuals with meaningful career opportunities. 
-                        We're dedicated to helping you find your next role and advance your career.
+                        
                         </div>
                 </div>
 
@@ -27,9 +27,9 @@ const Footer = () => {
                 <div className='column-section'>
                     <h3> Product</h3>
                         <ul>
-                            <li> About Us </li>
-                            <li> The Team </li>
-                            <li> Contact Us </li>
+                            <li> Log In</li>
+                            <li> Features </li>
+                            
                         </ul>
                 </div>
 
@@ -37,8 +37,8 @@ const Footer = () => {
                 <div className='column-section'>
                     <h3> Help </h3>
                         <ul>
-                            <li> Get Started </li>
                             <li> FAQS </li>
+                            <li> Get Started </li>
                             <li> Contact Us </li>
                         </ul>
                 </div>
