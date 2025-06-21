@@ -1,0 +1,122 @@
+.dashboard-grid {
+    height: calc(100vh - 60px);
+    display: grid;
+    grid-template-areas: 
+        "title"
+        "stats"
+        "applications";
+    grid-template-rows: auto auto 1fr;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1600px; 
+    margin: 0 auto; 
+    width: 100%; 
+    overflow: hidden; 
+}
+
+.dashboard-title {
+    grid-area: title;
+}
+
+.stats-section {
+    grid-area: stats;
+}
+
+.applications-section {
+    grid-area: applications;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+h1 {
+    text-align: center;
+    padding: 10px;
+    font-size: 25px;
+    color: #2F4156;
+    font-weight: bold;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.stats-box {
+    height: 80px;
+    border-radius: 20px;
+    border-color: rgb(189, 189, 189);
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.stats-container h3 {
+    font-weight: bold;
+    color: #2F4156;
+    text-align: center;
+}
+
+.applications-container {
+    flex: 1; 
+    padding: 20px;
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95); 
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    overflow-y: auto; /* Allow internal scrolling */
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.applications-container h3 {
+    font-weight: bold;
+    color:#2F4156;
+    text-align: center;
+}
+
+.separate {
+    padding: 20px;
+}
+
+
+
+
+
+
+
+
+/* Responsive adjustments for different device sizes*/
+@media (max-width: 768px) {
+    .dashboard-grid {
+        padding: 10px;
+        gap: 15px;
+    }
+    
+    .stats-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .applications-container {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-grid {
+        padding: 5px;
+        gap: 10px;
+    }
+    
+    h1 {
+        font-size: 20px;
+        padding: 15px;
+    }
+}

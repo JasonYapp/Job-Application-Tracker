@@ -1,12 +1,17 @@
+#macOS system file
 .DS_Store
-/node_modules/
+
+#Dependency Directories
+node_modules/
 
 # React Router
 /.react-router/
 /build/
 
+#Remove .env!!  
+.env
+.env.* 
+# ^^Catches .env.production, .env.development, etc.
+
 # Exclude Personal Project Notes
 PROJECT_NOTES.md 
-
-#Remove .env!!
-.env

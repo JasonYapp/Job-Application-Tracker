@@ -1,10 +1,23 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import './dashNav.css';
 
 
 
 const DashNav = () => {
+
+    // const navigate = useNavigate()
+
+    const handleLogout = () => {
+        // Clear authentication data
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        
+        // Redirect to home page
+        // navigate('/');
+    };
+
+
     return (
         
         <nav className="nav">
