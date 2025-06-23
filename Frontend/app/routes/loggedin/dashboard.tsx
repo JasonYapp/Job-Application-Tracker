@@ -56,7 +56,13 @@ const Dashboard = () => {
             
           <section className='applications-section separate'>
             <div className='applications-container'>
-              <h3> Applications</h3>
+              <h3> Application Stats</h3>
+
+              <p> Resume Screen  </p>
+              <p> Cognitive Test </p>
+              <p> Digital Interview </p>
+              <p> Code Exam </p>
+              <p> In-Person Interview </p>
             </div>
           </section>
 
