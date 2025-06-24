@@ -157,7 +157,7 @@ const Board = () => {
             return;
         }
 
-        //Updates local state immediately - not necessary but better for UX
+        //Updates local state immediately - not necessary but better for UX?
         setApplications(prev =>
             prev.map(app =>
                 app.id === activeId
@@ -207,13 +207,16 @@ const Board = () => {
     }
 
     return (
-        <div className="board-container">
 
+        
+        <div className="board-container">
+            
             <div className='board-header'>
-                <h1 className="board-title">Job Progress Line</h1>
                 <AddApplication />
             </div>
-            
+
+            <h1 className="board-title">Job Progress Line</h1>
+             
             <DndContext
                 sensors={sensors}
                 onDragStart={handleDragStart}
