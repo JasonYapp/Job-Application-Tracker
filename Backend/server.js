@@ -215,6 +215,58 @@ app.post('/api/auth/application', async (req, res) => {
 
 
 
+//Retrieve Application Data Route
+app.get('/api/auth/ApplicationData', async (req, res) => {
+    try {
+
+        //get userID from token first
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token){
+            return res.status(401).json({message:'No token provided'});
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+        
+
+        const connection = await mysql.createConnection(dbConfig);
+        
+        const [result] = await connection.execute(
+            `SELECT id, user_id, company_name, job_title, status, 
+                salary_range, job_url, notes, created_at, updated_at
+            FROM applications
+            WHERE user_id = ?
+            ORDER BY status`,
+            [userId]
+        );
+
+        await connection.end();
+
+        
+
+        res.json({
+            success: true,
+            applications: result
+        });
+
+
+    } catch (error) {
+        console.error('Error fetching applications:', error);
+
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+
+        res.status(500).json({ 
+        message: 'Internal server error',
+        details: error.message 
+        });
+    }
+})
+
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

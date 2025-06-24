@@ -1,0 +1,19 @@
+.task-container {
+    margin: 10px auto;
+    border-radius: 20px;
+    background-color: #C8D9E6;
+    padding: 15px;
+    max-width: 200px;
+}
+
+.task-container h3 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.task-container p {
+    text-align: left;
+    padding: 5px;
+    font-size: 13px;
+}
