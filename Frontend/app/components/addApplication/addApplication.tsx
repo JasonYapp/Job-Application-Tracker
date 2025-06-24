@@ -1,7 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import './addApplication.css';
 
-const addApplication = () => {
+interface AddApplicationProps {
+  onSuccess: () => void;
+}
+
+const addApplication = ({ onSuccess }: AddApplicationProps) => {
 
     const [showNewAppForm, setShowNewAppForm] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -68,7 +72,9 @@ const addApplication = () => {
                 console.error('Network error:', error);
                 setError('Network error. Please check if your backend is running.');
             } finally {
+                
                 setLoading(false);
+                onSuccess();
             }
       };
 
@@ -165,12 +171,12 @@ const addApplication = () => {
                         required
                         disabled={loading}
                       >
-                        <option value="">Select progression status</option>
-                        <option value="resume-screen">Resume Screen</option>
-                        <option value="cognitive-test">Cognitive Test</option>
-                        <option value="digital-interview">Digital Interview</option>
-                        <option value="code-exam">Code Exam</option>
-                        <option value="in-person-interview">In-Person Interview</option>
+                        <option value="">Select progression status</option> 
+                        <option value="Applied">Applied</option>
+                        <option value="CognitiveTesting">Cognitive Test</option>
+                        <option value="DigitalInterview">Digital Interview</option>
+                        <option value="CodeExam">Code Exam</option>
+                        <option value="Interview">In-Person Interview</option>
                       </select>
                       
 

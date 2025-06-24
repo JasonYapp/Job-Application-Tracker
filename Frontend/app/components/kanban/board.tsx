@@ -212,7 +212,7 @@ const Board = () => {
         <div className="board-container">
             
             <div className='board-header'>
-                <AddApplication />
+                <AddApplication onSuccess={fetchApplications}/>
             </div>
 
             <h1 className="board-title">Job Progress Line</h1>
