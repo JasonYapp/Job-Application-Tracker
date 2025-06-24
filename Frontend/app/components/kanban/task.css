@@ -1,19 +1,157 @@
-.task-container {
-    margin: 10px auto;
-    border-radius: 20px;
-    background-color: #C8D9E6;
-    padding: 15px;
-    max-width: 200px;
+.task {
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    cursor: grab;
+    transition: all 0.2s ease;
+    position: relative;
 }
 
-.task-container h3 {
-    text-align: center;
-    font-weight: bold;
-    font-size: 15px;
+.task:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
 }
 
-.task-container p {
-    text-align: left;
-    padding: 5px;
-    font-size: 13px;
+.task-dragging {
+    cursor: grabbing;
+    opacity: 0.5;
+    transform: rotate(5deg);
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.task-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+    line-height: 1.4;
+    flex-grow: 1;
+    margin-right: 8px;
+}
+
+.task-drag-handle {
+    color: #9ca3af;
+    font-size: 12px;
+    cursor: grab;
+    padding: 2px;
+    user-select: none;
+}
+
+.task-company {
+    margin-bottom: 12px;
+}
+
+.company-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #4f46e5;
+    background-color: #f0f0ff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.task-salary {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.salary-label {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.salary-value {
+    font-size: 12px;
+    color: #059669;
+    font-weight: 600;
+    background-color: #ecfdf5;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.task-dates {
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.task-date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date-label {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.date-value {
+    font-size: 11px;
+    color: #374151;
+}
+
+.task-notes {
+    margin-bottom: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.notes-label {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.notes-text {
+    font-size: 12px;
+    color: #374151;
+    margin: 0;
+    line-height: 1.4;
+    max-height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.task-url {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.job-link {
+    font-size: 11px;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    background-color: #eff6ff;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.job-link:hover {
+    background-color: #dbeafe;
+    text-decoration: underline;
 }

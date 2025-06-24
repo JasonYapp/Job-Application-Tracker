@@ -1,3 +1,7 @@
+.background-container{
+    background: linear-gradient(135deg, #a8cae4 0%, #2F4156 100%);
+}
+
 .dashboard-grid {
     height: calc(100vh - 60px);
     display: grid;

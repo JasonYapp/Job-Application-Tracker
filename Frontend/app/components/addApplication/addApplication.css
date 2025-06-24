@@ -1,0 +1,157 @@
+.addTask{
+    padding: 10px;
+    border-radius: 20px;
+    color: #111827;
+    background-color: #C8D9E6;
+    border-color: #2F4156;
+    border-width: 1px;
+    font-weight: bold;
+    cursor:pointer;
+    
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.close-button:hover {
+    color: #808080;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    width: 90%;
+    max-width: 500px; /* Prevent it from getting too wide */
+    max-height: 90vh; /* Prevent it from getting too tall */
+    overflow-y: auto; /* Allow scrolling if content is too tall */
+}
+
+.popup-content h2 {
+    text-align: center;
+    padding: 20px;
+    font-weight: bold;
+    color: #2F4156;
+    font-size: 20px;
+    margin: 0 0 20px 0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between form elements */
+    margin-bottom: 20px;
+}
+
+/* Style all form inputs and selects */
+.form input,
+.form select {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.form input:focus,
+.form select:focus {
+    outline: none;
+    border-color: #2F4156;
+}
+
+.additional-notes {
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  resize: vertical; /* Allows user to resize height only */
+  min-height: 100px; /* Makes it noticeably larger than inputs */
+}
+
+.additional-notes:focus {
+  outline: none;
+  border-color: #2F4156;
+}
+
+
+/* Submit button container */
+.submitButton {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.submitButton button {
+    padding: 12px 24px;
+    background-color: #2F4156;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    min-width: 150px;
+    transition: background-color 0.3s ease;
+}
+
+.submitButton button:hover {
+    background-color: #1a2530;
+}
+
+.submitButton button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .popup-content {
+        width: 95%;
+        padding: 15px;
+    }
+    
+    .popup-content h2 {
+        font-size: 18px;
+        padding: 15px;
+    }
+    
+    .form {
+        gap: 12px;
+    }
+    
+    .form input,
+    .form select,
+    .calendar-button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}

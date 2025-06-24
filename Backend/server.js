@@ -243,11 +243,79 @@ app.get('/api/auth/ApplicationData', async (req, res) => {
 
         await connection.end();
 
-        
-
         res.json({
             success: true,
             applications: result
+        });
+
+
+    } catch (error) {
+        console.error('Error fetching applications:', error);
+
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+
+        res.status(500).json({ 
+        message: 'Internal server error',
+        details: error.message 
+        });
+    }
+})
+
+
+
+//Update Application Data Route
+app.put('/api/auth/ApplicationUpdate', async (req, res) => {
+    try {
+
+        //get userID from token first
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token){
+            return res.status(401).json({message:'No token provided'});
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+
+        const { id, status } = req.body; //gets the applicationID and status from the request body
+
+         if (!id || !status) {
+            return res.status(400).json({message: 'Application ID and status are required'});
+        }
+        
+
+        const connection = await mysql.createConnection(dbConfig);
+        
+        const [result] = await connection.execute(
+            `UPDATE applications 
+             SET status = ?, updated_at = NOW() 
+             WHERE id = ? AND user_id = ?`,
+            [status, id, userId]
+        );
+
+        // Check if any rows were affected (i.e., if the application exists and belongs to the user)
+        if (result.affectedRows === 0) {
+            await connection.end();
+            return res.status(404).json({message: 'Application not found or not authorized'});
+        }
+
+        // Fetch and return the updated applications list
+        const [applications] = await connection.execute(
+            `SELECT id, user_id, company_name, job_title, status, 
+                salary_range, job_url, notes, created_at, updated_at
+            FROM applications
+            WHERE user_id = ?
+            ORDER BY status`,
+            [userId]
+        );
+
+        await connection.end();
+
+        res.json({
+            success: true,
+            applications: applications
         });
 
 

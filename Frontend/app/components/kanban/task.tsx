@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import React from 'react';
+import { useDraggable } from '@dnd-kit/core';
 import './task.css';
 
-const Task = () => {
 
-    interface Application {
+interface Application {
     id: number;
     user_id: number;
     company_name: string;
@@ -17,84 +14,84 @@ const Task = () => {
     notes?: string;
     created_at: string;
     updated_at: string;
-    }
-
-    const [applications, setApplications] = useState<Application[]>([])
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-
-    useEffect(() =>  {
-        fetchApplications();
-    }, [])
-
-    const fetchApplications = async () => {
-
-        setLoading(true);
-        setError('');
-
-        try {
-            const response = await fetch('http://localhost:5000/api/auth/ApplicationData', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch applications');
-            }
-
-            const data = await response.json();
-            setApplications(data.applications);
-            
-
-        } catch (error) {
-            console.error('Error fetching applications:', error);
-            setError('Failed to load applications');
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    // Handle loading state
-    if (loading) {
-        return <div>Loading applications...</div>;
-    }
-
-    // Handle error state
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
-
-    return(
-        <div>
-        {applications.length === 0 ? (
-            <p> No applications found </p>
-        ) : (
-            <div>
-                {applications.map(app => (
-                    <div key={app.id} className='task-container'>
-
-                        <h3> {app.job_title} </h3>
-
-                        <p>{app.company_name}</p>
-                        <p>${app.salary_range}</p>
-                        <p>{new Date(app.created_at).toLocaleDateString()}</p>
-                        <p>{app.status}</p>
-                    </div>
-                ))}
-            </div>
-            
-        )}
-
-        </div>
-    );
-
-
-
 }
 
+interface TaskProps {
+    application: Application;
+}
 
+const Task = ({ application }: TaskProps) => {
+    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+        id: application.id,
+    });
+
+    const style = transform ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        opacity: isDragging ? 0.5 : 1,
+    } : undefined;
+
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+    };
+
+    return (
+        <div
+            ref={setNodeRef}
+            style={style}
+            {...listeners}
+            {...attributes}
+            className={`task ${isDragging ? 'task-dragging' : ''}`}
+        >
+            <div className="task-header">
+                <h3 className="task-title">{application.job_title}</h3>
+                <div className="task-drag-handle">⋮⋮</div>
+            </div>
+            
+            <div className="task-company">
+                <span className="company-name">{application.company_name}</span>
+            </div>
+
+            {application.salary_range && (
+                <div className="task-salary">
+                    <span className="salary-label">Salary:</span>
+                    <span className="salary-value">{application.salary_range}</span>
+                </div>
+            )}
+
+            <div className="task-dates">
+                <div className="task-date">
+                    <span className="date-label">Applied:</span>
+                    <span className="date-value">{formatDate(application.created_at)}</span>
+                </div>
+                {application.updated_at !== application.created_at && (
+                    <div className="task-date">
+                        <span className="date-label">Updated:</span>
+                        <span className="date-value">{formatDate(application.updated_at)}</span>
+                    </div>
+                )}
+            </div>
+
+            {application.notes && (
+                <div className="task-notes">
+                    <span className="notes-label">Notes:</span>
+                    <p className="notes-text">{application.notes}</p>
+                </div>
+            )}
+
+            {application.job_url && (
+                <div className="task-url">
+                    <a href={application.job_url} target="_blank" rel="noopener noreferrer" className="job-link">
+                        View Job Posting
+                    </a>
+                </div>
+            )}
+        </div>
+    );
+};
 
 export default Task;
