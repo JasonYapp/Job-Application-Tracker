@@ -1,6 +1,7 @@
-import {  useState, type FormEvent } from "react";
+import {  useEffect, useState, type FormEvent } from "react";
 
 import '../../css/loggedin/progressLine.css';
+import { useNavigate } from "react-router";
 
 const ProgressLine= () => {
 
@@ -15,7 +16,6 @@ const ProgressLine= () => {
     const [jobLink, setJobLink] = useState('');
     const [notes, setNotes] = useState('');
     const [progressionStatus, setProgressionStatus] = useState('');
-
 
     const addTask = () => {
         setShowNewAppForm(true);
@@ -47,6 +47,9 @@ const ProgressLine= () => {
             const data = await response.json();
               
             if (response.ok) {
+
+              setShowNewAppForm(false)
+              
               // Success - redirect to login or dashboard
               console.log('Application created successfully:', data);
               
