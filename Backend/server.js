@@ -158,6 +158,64 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 
+//Applications route (add applications)
+app.post('/api/auth/application', async (req, res) => {
+    try {
+
+        //get userID from token first
+        const token = req.headers.authorization?.split('')[1];
+
+        if (!token){
+            return res.status(401).json({message:'No token provided'});
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+        
+        const { job_title, company_name, salary_range, status, job_url, notes} = req.body;
+
+        if (!job_title || !company_name || !salary_range || !status || !job_url) {
+                return res.status(400).json({ 
+                    message: 'Missing required fields: job title, company name, salary, status, and job URL are required' 
+                });
+            }
+        
+        
+        const connection = await mysql.createConnection(dbConfig);
+        
+        const [result] = await connection.execute(
+            `INSERT INTO applications (
+                user_id, company_name, job_title, status,  
+                salary_range, job_url, notes
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [userId, company_name, job_title, status, salary_range, job_url, notes || null]
+        );
+
+        await connection.end();
+
+        res.status(201).json({
+            message: 'Application successfully created',
+            applicationId: result.insertId
+        })
+
+
+    } catch (error) {
+        console.error('Database error:', error);
+
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+
+        res.status(500).json({ 
+        message: 'Internal server error',
+        details: error.message 
+        });
+    }
+})
+
+
+
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

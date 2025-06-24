@@ -78,28 +78,23 @@
     border-color: #2F4156;
 }
 
-/* Style the Google Calendar button */
-.calendar-button {
-    margin-top: 15px;
-    margin-bottom: 15px;
-    padding: 12px;
-    background-color: #4285f4;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.additional-notes {
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  resize: vertical; /* Allows user to resize height only */
+  min-height: 100px; /* Makes it noticeably larger than inputs */
 }
 
-.calendar-button:hover {
-    background-color: #3367d6;
+.additional-notes:focus {
+  outline: none;
+  border-color: #2F4156;
 }
 
-.calendar-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
 
 /* Submit button container */
 .submitButton {

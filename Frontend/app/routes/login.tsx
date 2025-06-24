@@ -31,6 +31,9 @@ const Login = () => {
 
         const data = await response.json();
 
+        console.log('Login response data:', data);
+        console.log('Token from response:', data.token);
+
             if (response.ok) {
                 // Store the token and user data
                 localStorage.setItem('token', data.token);
