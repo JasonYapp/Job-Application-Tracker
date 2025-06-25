@@ -8,8 +8,8 @@ import {
     type DragEndEvent,
     type DragStartEvent,
 } from '@dnd-kit/core';
-import Column from './column'; // We'll create this next
-import Task from './task'; // We'll create this last
+import Column from './column'; 
+import Task from './task'; 
 import AddApplication from "../../components/addApplication/addApplication";
 
 import './board.css';

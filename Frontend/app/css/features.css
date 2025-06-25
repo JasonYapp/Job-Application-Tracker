@@ -1,0 +1,40 @@
+.background {
+    background: linear-gradient(135deg, #a8cae4 0%, #2F4156 100%);
+    padding-bottom:120px;
+}
+
+.container {
+    padding-top: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95); 
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+header {
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    color: #2F4156;
+    padding: 50px;
+}
+
+.tagline {
+    margin: 0 auto;
+    color: #567C8D;
+    max-width: 600px;
+    text-align: left;
+}
+
+.tagline p {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+}
+
+.separate{
+    padding: 150px;
+}
+
