@@ -15,6 +15,7 @@ export default [
     route("dashboard", "routes/loggedin/dashboard.tsx"),
     route("settings", "routes/loggedin/settings.tsx"),
     route("progressLine", "routes/loggedin/progressLine.tsx"),
+    route("editTask/:id", "routes/loggedin/editTask.tsx"),
   ]),
   
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import './task.css';
+import { useNavigate } from 'react-router';
 
 
 interface Application {
@@ -21,6 +22,9 @@ interface TaskProps {
 }
 
 const Task = ({ application }: TaskProps) => {
+
+    const navigate = useNavigate();
+
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: application.id,
     });
@@ -38,6 +42,7 @@ const Task = ({ application }: TaskProps) => {
             year: 'numeric'
         });
     };
+
 
     return (
         <div
@@ -88,7 +93,20 @@ const Task = ({ application }: TaskProps) => {
                     <a href={application.job_url} target="_blank" rel="noopener noreferrer" className="job-link">
                         View Job Posting
                     </a>
+
+                    <button 
+                        onClick={() => navigate(`/editTask/${application.id}`)}
+                        className="edit-link"
+                    >
+                        Edit
+                    </button>
+
+                    <a href={application.job_url} target="_blank" rel="noopener noreferrer" className="job-link">
+                        Delete
+                    </a>
                 </div>
+
+                
             )}
         </div>
     );

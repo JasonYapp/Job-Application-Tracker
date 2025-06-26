@@ -215,7 +215,7 @@ app.post('/api/auth/application', async (req, res) => {
 
 
 
-//Retrieve Application Data Route
+//Retrieve Application Data Route - Retrieves ALL objects
 app.get('/api/auth/ApplicationData', async (req, res) => {
     try {
 
@@ -264,9 +264,57 @@ app.get('/api/auth/ApplicationData', async (req, res) => {
 })
 
 
+// Retrieve SINGLE application by ID 
+app.get('/api/auth/SingleApplication/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Get userID from token (same as your other routes)
+        const token = req.headers.authorization?.split(' ')[1];
 
-//Update Application Data Route
-app.put('/api/auth/ApplicationUpdate', async (req, res) => {
+        if (!token){
+            return res.status(401).json({message:'No token provided'});
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+        
+        console.log('Fetching application with ID:', id, 'for user:', userId);
+        
+        const connection = await mysql.createConnection(dbConfig);
+        
+        // Query to get the application by ID AND user_id (for security)
+        const [rows] = await connection.execute(
+            `SELECT * FROM applications WHERE id = ? AND user_id = ?`,
+            [id, userId]
+        );
+
+        await connection.end();
+
+        if (!rows || rows.length === 0) {
+            return res.status(404).json({ message: 'Application not found' });
+        }
+        
+        res.json(rows[0]); // Return the first (and only) result
+        
+    } catch (error) {
+        console.error('Error fetching application:', error);
+        
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+        
+        res.status(500).json({ 
+            message: 'Server error',
+            details: error.message 
+        });
+    }
+});
+
+
+
+//Update Application Data Route - UPDATES STATUS ONLY
+app.put('/api/auth/ApplicationUpdateStatus', async (req, res) => {
     try {
 
         //get userID from token first
@@ -321,6 +369,88 @@ app.put('/api/auth/ApplicationUpdate', async (req, res) => {
 
     } catch (error) {
         console.error('Error fetching applications:', error);
+
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+
+        res.status(500).json({ 
+        message: 'Internal server error',
+        details: error.message 
+        });
+    }
+})
+
+
+
+//Edit Application Data Route 
+app.put('/api/auth/EditApplication/:id', async (req, res) => {
+    try {
+
+        //get userID from token first
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token){
+            return res.status(401).json({message:'No token provided'});
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+        const applicationId = req.params.id;
+
+        // Validate applicationId is a number
+        if (!applicationId || isNaN(applicationId)) {
+            return res.status(400).json({ message: 'Invalid application ID' });
+        }
+
+        const { job_title, company_name, salary_range, status, job_url, notes } = req.body;
+
+        // Validate required fields
+        if (!job_title || !company_name || !salary_range || !status || !job_url) {
+            return res.status(400).json({
+                message: 'Missing required fields: job title, company name, salary, status, and job URL are required'
+            });
+        }
+
+        const connection = await mysql.createConnection(dbConfig);
+
+        // Check if the application exists and belongs to the user
+        const [existingRows] = await connection.execute(
+            `SELECT id FROM applications WHERE id = ? AND user_id = ?`,
+            [applicationId, userId]
+        );
+
+        if (existingRows.length === 0) {
+            await connection.end();
+            return res.status(404).json({
+                message: 'Application not found or access denied'
+            });
+        }
+        
+        const [result] = await connection.execute(
+            `UPDATE applications 
+             SET company_name = ?, job_title = ?, status = ?, 
+                 salary_range = ?, job_url = ?, notes = ?, updated_at = NOW()
+             WHERE id = ? AND user_id = ?`,
+            [company_name, job_title, status, salary_range, job_url, notes || null, applicationId, userId]
+        );
+
+        await connection.end();
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                message: 'Application not found or no changes made'
+            });
+        }
+
+        res.status(200).json({
+            message: 'Application updated successfully',
+            applicationId: applicationId
+        });
+
+
+    } catch (error) {
+        console.error('Error updating applications:', error);
 
         if (error.name === 'JsonWebTokenError') {
             return res.status(401).json({ message: 'Invalid token' });

@@ -1,0 +1,115 @@
+.background {
+    background: linear-gradient(135deg, #a8cae4 0%, #2F4156 100%);
+    height: calc(100vh - 60px);
+    width: 100%;
+}
+
+.container {
+    padding-top: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95); 
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+
+/* For the form */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; 
+}
+
+.form h2 {
+    margin: 0 auto;
+    font-weight: bold;
+    font-size: 25px;
+    color:#2F4156;
+}
+
+
+.form input,
+.form select {
+    margin: 0 auto;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 80%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.form input:focus,
+.form select:focus {
+    outline: none;
+    border-color: #2F4156;
+}
+
+.additional-notes {
+    margin: 0 auto;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 80%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+    resize: vertical; 
+    min-height: 100px; 
+}
+
+.additional-notes:focus {
+  outline: none;
+  border-color: #2F4156;
+}
+
+
+
+.submitButton {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.submitButton button {
+    padding: 12px 24px;
+    background-color: #2F4156;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    min-width: 150px;
+    transition: background-color 0.3s ease;
+}
+
+.submitButton button:hover {
+    background-color: #729dce;
+}
+
+.submitButton button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .form {
+        gap: 12px;
+    }
+    
+    .form input,
+    .form select,
+    .calendar-button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+

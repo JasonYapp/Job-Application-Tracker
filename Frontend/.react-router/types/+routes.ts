@@ -34,12 +34,17 @@ type Pages = {
   "/progressLine": {
     params: {};
   };
+  "/editTask/:id": {
+    params: {
+      "id": string;
+    };
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/features" | "/about" | "/login" | "/signup" | "/dashboard" | "/settings" | "/progressLine";
+    page: "/" | "/features" | "/about" | "/login" | "/signup" | "/dashboard" | "/settings" | "/progressLine" | "/editTask/:id";
   };
   "routes/_layout.tsx": {
     id: "routes/_layout";
@@ -67,7 +72,7 @@ type RouteFiles = {
   };
   "routes/loggedin/_layout.tsx": {
     id: "routes/loggedin/_layout";
-    page: "/dashboard" | "/settings" | "/progressLine";
+    page: "/dashboard" | "/settings" | "/progressLine" | "/editTask/:id";
   };
   "routes/loggedin/dashboard.tsx": {
     id: "routes/loggedin/dashboard";
@@ -80,5 +85,9 @@ type RouteFiles = {
   "routes/loggedin/progressLine.tsx": {
     id: "routes/loggedin/progressLine";
     page: "/progressLine";
+  };
+  "routes/loggedin/editTask.tsx": {
+    id: "routes/loggedin/editTask";
+    page: "/editTask/:id";
   };
 };
