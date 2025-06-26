@@ -14,6 +14,7 @@ import AddApplication from "../../components/addApplication/addApplication";
 
 import './board.css';
 
+
 const Board = () => {
 
     interface Application {
@@ -34,6 +35,9 @@ const Board = () => {
     const [error, setError] = useState('');
     const [activeId, setActiveId] = useState<number | null>(null);
     const [activeApplication, setActiveApplication] = useState<Application | null>(null);
+
+    const [showPopup, setShowPopup] = useState(false);
+    const [applicationToDelete, setApplicationToDelete] = useState(null);
 
 
     const sensors = useSensors(
@@ -229,6 +233,7 @@ const Board = () => {
                         title={column.title}
                         applications={column.applications}
                         status={column.id}
+                        onApplicationDeleted={fetchApplications}
                         />
                     ))}
                 </div>
@@ -245,12 +250,11 @@ const Board = () => {
             
             {applications.length === 0 && (
                 <div className="empty-state">
-                <p>No applications found</p>
+                
                 </div>
             )}
+            
         </div>
-
-
 
     );
 }

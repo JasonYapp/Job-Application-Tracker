@@ -21,10 +21,10 @@ interface Application {
 interface EditProps {
     application: Application;
     onSuccess?: () => void
-    onCancel?: () => void;
+    
 }
 
-const EditTask = ({ onSuccess, onCancel }: EditProps) => {
+const EditTask = ({ onSuccess}: EditProps) => {
     const { id } = useParams();
     const [fetchLoading, setFetchLoading] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -161,6 +161,11 @@ const EditTask = ({ onSuccess, onCancel }: EditProps) => {
             </div>
         );
     }
+
+
+    const onCancel = () => {
+        navigate('/progressLine');
+    }
     
         
 
@@ -267,16 +272,16 @@ const EditTask = ({ onSuccess, onCancel }: EditProps) => {
                                     {loading ? 'Updating Application...' : 'Update Application'}
                                 </button>
 
-                                {onCancel && (
-                                    <button 
-                                        type="button" 
-                                        onClick={onCancel}
-                                        disabled={loading}
-                                        style={{ marginLeft: '1rem' }}
-                                    >
-                                        Back to Dashboard
-                                    </button>
-                                )}
+                                
+                                <button 
+                                    type="button" 
+                                    onClick={onCancel}
+                                    disabled={loading}
+                                    style={{ marginLeft: '1rem' }}
+                                >
+                                    Back to Job Progress Line
+                                </button>
+                                
                             </div>
                         </form>
                         

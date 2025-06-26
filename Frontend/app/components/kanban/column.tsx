@@ -22,10 +22,11 @@ interface ColumnProps {
     title: string;
     applications: Application[];
     status: string;
+    onApplicationDeleted: () => void;
 }
 
 
-const Column = ({ title, applications, status }: ColumnProps) => {
+const Column = ({ title, applications, status, onApplicationDeleted }: ColumnProps) => {
 
     const { isOver, setNodeRef } = useDroppable({
         id: status,
@@ -51,6 +52,7 @@ const Column = ({ title, applications, status }: ColumnProps) => {
                     <Task 
                         key={application.id} 
                         application={application} 
+                        onApplicationDeleted={onApplicationDeleted}
                     />
                 ))}
                 

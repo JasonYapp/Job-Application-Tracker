@@ -158,22 +158,45 @@
 
 .edit-link {
     font-size: 11px;
-    color: #ffd000;
+    color: #d97706;
     text-decoration: none;
     font-weight: 500;
     display: inline-flex;
     align-items: center;
     padding: 4px 8px;
-    background-color: #fff9c8;
+    background-color: #fef3c7;
     border-radius: 4px;
     transition: all 0.2s ease;
 }
 
 .edit-link:hover {
-    background-color: #fff280;
+    background-color: #fde68a;
+    color: #92400e; 
     text-decoration: underline;
     cursor: pointer;
 }
+
+.delete-link {
+    font-size: 11px;
+    color: #dc2626;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    background-color: #fef2f2;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.delete-link:hover {
+    background-color: #fecaca;
+    color: #991b1b; 
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
 
 
 

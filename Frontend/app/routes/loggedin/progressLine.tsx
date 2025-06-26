@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import Task  from '../../components/kanban/task';
 
 import '../../css/loggedin/progressLine.css';
+import '../../css/loggedin/editTask.css'
 import Board from "../../components/kanban/board";
 
 

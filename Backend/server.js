@@ -464,6 +464,76 @@ app.put('/api/auth/EditApplication/:id', async (req, res) => {
 })
 
 
+//Delete an application by application ID
+app.delete('/api/auth/DeleteApplication/:id', async (req, res) => {
+    
+    try {
+        
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token){
+            return res.status(401).json({message:'No token provided'});
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+        const applicationId = req.params.id;
+
+        // Validate applicationId is a number
+        if (!applicationId || isNaN(applicationId)) {
+            return res.status(400).json({ message: 'Invalid application ID' });
+        }
+
+
+        const connection = await mysql.createConnection(dbConfig);
+
+        // Check if the application exists and belongs to the user
+        const [existingRows] = await connection.execute(
+            `SELECT id FROM applications WHERE id = ? AND user_id = ?`,
+            [applicationId, userId]
+        );
+
+        if (existingRows.length === 0) {
+            await connection.end();
+            return res.status(404).json({
+                message: 'Application not found or access denied'
+            });
+        }
+        
+        const [result] = await connection.execute(
+            `DELETE FROM applications 
+             WHERE id = ? AND user_id = ?`,
+            [applicationId, userId]
+        );
+
+        await connection.end();
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                message: 'Application not found or no changes made'
+            });
+        }
+
+        res.status(200).json({
+            message: 'Application deleted successfully',
+            applicationId: applicationId
+        });
+
+    }   catch (error) {
+        console.error('Error deleting applications:', error);
+
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+
+        res.status(500).json({ 
+        message: 'Internal server error',
+        details: error.message 
+        });
+    } 
+})
+
+
 
 
 const PORT = process.env.PORT || 5000;

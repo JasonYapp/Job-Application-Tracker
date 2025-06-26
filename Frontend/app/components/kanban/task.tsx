@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import './task.css';
 import { useNavigate } from 'react-router';
@@ -19,11 +19,42 @@ interface Application {
 
 interface TaskProps {
     application: Application;
+    onApplicationDeleted: () => void;
 }
 
-const Task = ({ application }: TaskProps) => {
+const Task = ({ application, onApplicationDeleted }: TaskProps) => {
 
+    const [showNewAppForm, setShowNewAppForm] = useState(false);
     const navigate = useNavigate();
+
+    const handleDelete = async () => {
+        
+        try {
+            const response = await fetch(`http://localhost:5000/api/auth/DeleteApplication/${application.id}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            });
+
+            if (response.ok) {
+            console.log('Deleted');
+            onApplicationDeleted(); // Refresh board
+            } else {
+            const data = await response.json();
+            console.error('Delete failed:', data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+
+
+        }
+    };
+
+    const deletePopUp = () => {
+        setShowNewAppForm(true);
+    }
 
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: application.id,
@@ -94,16 +125,22 @@ const Task = ({ application }: TaskProps) => {
                         View Job Posting
                     </a>
 
-                    <button 
-                        onClick={() => navigate(`/editTask/${application.id}`)}
-                        className="edit-link"
-                    >
-                        Edit
-                    </button>
+                    <div style={{ display: 'flex', gap: '4px', marginTop: '4px' }}>
+                        <button 
+                            onClick={() => navigate(`/editTask/${application.id}`)}
+                            className="edit-link"
+                        >
+                            Edit
+                        </button>
 
-                    <a href={application.job_url} target="_blank" rel="noopener noreferrer" className="job-link">
-                        Delete
-                    </a>
+                        <button 
+                            onClick={() => handleDelete()}
+                            className="delete-link"
+                        >
+                            Delete 
+                        </button>
+                    </div>
+
                 </div>
 
                 

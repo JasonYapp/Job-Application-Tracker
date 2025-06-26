@@ -30,8 +30,8 @@
 }
 
 
-.form input,
-.form select {
+.form.form input,
+.form.form select {
     margin: 0 auto;
     padding: 12px;
     border: 2px solid #ddd;
@@ -71,8 +71,8 @@
 .submitButton {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
-    margin-bottom: 15px;
+    margin-top: 35px;
+    margin-bottom: 35px;
 }
 
 .submitButton button {
