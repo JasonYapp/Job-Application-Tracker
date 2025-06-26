@@ -1,7 +1,6 @@
+import '../../css/loggedin/editTask.css'
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router';
-
-import '../../css/loggedin/editTask.css'
 
 
 interface Application {

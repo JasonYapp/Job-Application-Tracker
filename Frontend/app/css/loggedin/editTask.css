@@ -48,7 +48,7 @@
     border-color: #2F4156;
 }
 
-.additional-notes {
+textarea.additional-notes {
     margin: 0 auto;
     padding: 12px;
     border: 2px solid #ddd;
@@ -61,7 +61,7 @@
     min-height: 100px; 
 }
 
-.additional-notes:focus {
+textarea.additional-notes:focus{
   outline: none;
   border-color: #2F4156;
 }
