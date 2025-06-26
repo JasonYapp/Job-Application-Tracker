@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Users, Brain, Code, MessageCircle, CheckCircle, X, Calendar, Briefcase } from 'lucide-react';
-import DashFunnel from '../../components/dashFunnel/DashFunnel';
+import DashFunnel from '../../components/dashFunnel/dashFunnel';
 
 import '../../css/loggedin/dashboard.css';
 
@@ -181,7 +181,6 @@ const Dashboard = () => {
           
         <section className="applications-section separate">
           <div className="applications-container">
-            <h3>Application Pipeline</h3>
             <DashFunnel applications={applications} />
           </div>
         </section>

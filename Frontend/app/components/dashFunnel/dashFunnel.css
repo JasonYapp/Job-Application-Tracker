@@ -1,14 +1,13 @@
-/* Funnel Chart Styles */
 .funnel-container {
     width: 100%;
 }
 
 .funnel-stages {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .funnel-stage-wrapper {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .funnel-stage {
@@ -19,25 +18,30 @@
 }
 
 .funnel-stage-applied {
-    background: #EFF6FF;
+    background: #EFF6FF; 
 }
 
 .funnel-stage-cognitive-testing {
-    background: #F3E8FF;
+    background: #F3E8FF; 
 }
 
 .funnel-stage-code-exam {
-    background: #ECFEFF;
+    background: #FEFCE8; 
 }
 
 .funnel-stage-interview {
-    background: #ECFDF5;
+    background: #ECFDF5; 
+}
+
+.funnel-stage-physical-interview {
+    background: #FFECEC; 
 }
 
 .funnel-stage-offer {
-    background: #F0FDF4;
+    background: #F0FDF4; 
 }
 
+/* Progress Bar - Darker Matching Colors */
 .funnel-progress {
     position: absolute;
     top: 0;
@@ -47,23 +51,27 @@
 }
 
 .funnel-progress-applied {
-    background: #3B82F6;
+    background: #3B82F6; 
 }
 
 .funnel-progress-cognitive-testing {
-    background: #8B5CF6;
+    background: #8B5CF6; 
 }
 
 .funnel-progress-code-exam {
-    background: #06B6D4;
+    background: #FACC15; 
 }
 
 .funnel-progress-interview {
-    background: #10B981;
+    background: #0ED6DD;
+}
+
+.funnel-progress-physical-interview {
+    background: #FF5252; 
 }
 
 .funnel-progress-offer {
-    background: #22C55E;
+    background: #22C55E; 
 }
 
 .funnel-content {
@@ -98,11 +106,11 @@
 }
 
 .funnel-icon-code-exam {
-    background: #06B6D4;
+    background: #ffd102;
 }
 
 .funnel-icon-interview {
-    background: #10B981;
+    background: #0ed6dd;
 }
 
 .funnel-icon-offer {
@@ -144,23 +152,9 @@
     padding: 4px 0;
 }
 
-.funnel-connector-dot {
-    width: 16px;
-    height: 16px;
-    border: 1px solid #D1D5DB;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white;
-}
 
-.funnel-connector-inner {
-    width: 6px;
-    height: 6px;
-    background: #9CA3AF;
-    border-radius: 50%;
-}
+
+
 
 .funnel-no-data {
     text-align: center;
