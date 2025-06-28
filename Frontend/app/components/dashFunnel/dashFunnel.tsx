@@ -13,7 +13,7 @@ interface Application {
     notes?: string;
     created_at: string;
     updated_at: string;
-    previous_status?: string; // Track where application was before rejection
+    previous_status?: string; // Track where application was before rejection. IN TESTING FOR DASHFUNNEL.
 }
 
 interface DashFunnelProps {
@@ -37,7 +37,20 @@ interface FunnelData extends Stage {
   rejectionRate: number;
 }
 
+
+
 const DashFunnel: React.FC<DashFunnelProps> = ({ applications }) => {
+
+    console.log('DashFunnel received applications:', applications);
+
+    // Find any rejected applications and log their previous_status
+    const rejectedApps = applications.filter(app => app.status.toLowerCase() === 'rejected');
+    console.log('Rejected apps in funnel:', rejectedApps);
+    rejectedApps.forEach(app => {
+        console.log(`App ${app.company_name}: previous_status = ${app.previous_status}`);
+    });
+
+
     const [funnelData, setFunnelData] = useState<FunnelData[]>([]);
 
     const stages: Stage[] = [
@@ -72,7 +85,7 @@ const DashFunnel: React.FC<DashFunnelProps> = ({ applications }) => {
         { 
             key: 'physical interview', 
             name: 'Physical Interview', 
-            icon: UserCheck, // Changed from Code to UserCheck
+            icon: UserCheck, 
             color: 'bg-indigo-500',
             bgColor: 'bg-indigo-50'
         },
@@ -91,100 +104,245 @@ const DashFunnel: React.FC<DashFunnelProps> = ({ applications }) => {
         }
     }, [applications]);
 
-    const getStageIndex = (status: string): number => {
-        return stages.findIndex(stage => stage.key.toLowerCase() === status.toLowerCase());
-    };
 
+    // Step 1: Define what we're tracking
     const calculateFunnelData = () => {
         const totalApplications = applications.length;
+
         
         if (totalApplications === 0) {
             setFunnelData([]);
             return;
         }
 
-        // Initialize stage data
-        const stageData: { [key: string]: { current: number; rejected: number; totalReached: number } } = {};
-        
-        stages.forEach(stage => {
-            stageData[stage.key] = {
-                current: 0,
-                rejected: 0,
-                totalReached: 0
-            };
-        });
+        // Step 2: Initialize simple counters (one for each stage)
+        // These track TOTAL applications that have reached each stage
+        let appliedCount = 0;
+        let cognitiveCount = 0;
+        let digitalInterviewCount = 0;
+        let codeExamCount = 0;
+        let physicalInterviewCount = 0;
+        let offerCount = 0;
 
-        // Process each application
-        applications.forEach(app => {
-            const currentStatus = app.status.toLowerCase();
-            const currentStageIndex = getStageIndex(currentStatus);
+        // These track applications CURRENTLY at each stage
+        let currentApplied = 0;
+        let currentCognitive = 0;
+        let currentDigitalInterview = 0;
+        let currentCodeExam = 0;
+        let currentPhysicalInterview = 0;
+        let currentOffer = 0;
+
+        // These track applications REJECTED from each stage
+        let rejectedFromApplied = 0;
+        let rejectedFromCognitive = 0;
+        let rejectedFromDigitalInterview = 0;
+        let rejectedFromCodeExam = 0;
+        let rejectedFromPhysicalInterview = 0;
+        let rejectedFromOffer = 0;
+
+        // Step 3: Define processing functions inside calculateFunnelData so they can access the variables
+        function processRejectedApplication(app: Application) {
+
+            // Get the stage they were rejected FROM. 
+            const previousStatus = app.previous_status?.toLowerCase() || 'applied';
+
+            //DEBUGGING TEST. NEED TO IMPLEMENT BACKEND ROUTES AND NEW API CALL FOR FRONTEND TO RETRIEVE previous_status FROM DB ONCE ADDED AS A PROPERTY.
+            console.log('Rejected app:', app.company_name, 'previous_status:', app.previous_status, 'normalized:', previousStatus);
             
-            if (currentStatus === 'rejected') {
-                // For rejected applications, count them in their previous stage
-                const previousStatus = app.previous_status?.toLowerCase() || 'applied';
-                const previousStageIndex = getStageIndex(previousStatus);
-                
-                if (previousStageIndex >= 0) {
-                    const stageKey = stages[previousStageIndex].key;
-                    stageData[stageKey].rejected++;
-                    stageData[stageKey].totalReached++;
+            // Every rejected application had to apply first
+            appliedCount++;
+            
+            // Figure out what stage they were rejected from
+            switch (previousStatus) {
+                case 'applied':
+                    rejectedFromApplied++;
+                    break;
                     
-                    // This application reached all stages up to and including the rejection stage
-                    for (let i = 0; i <= previousStageIndex; i++) {
-                        if (i < previousStageIndex) {
-                            stageData[stages[i].key].totalReached++;
-                        }
-                    }
-                }
-            } else if (currentStageIndex >= 0) {
-                // For non-rejected applications
-                const stageKey = stages[currentStageIndex].key;
-                stageData[stageKey].current++;
+                case 'cognitivetesting':
+                    // Application passed applied, reached cognitive, got rejected from cognitive
+                    cognitiveCount++;
+                    rejectedFromCognitive++;
+                    break;
+                    
+                case 'digitalinterview': 
+                    // Application passed: applied → cognitive → reached digital interview → rejected
+                    cognitiveCount++;
+                    digitalInterviewCount++;
+                    rejectedFromDigitalInterview++;
+                    break;
+                    
+                case 'codeexam':
+                    // Application passed: applied → cognitive → digital → reached code → rejected
+                    cognitiveCount++;
+                    digitalInterviewCount++;
+                    codeExamCount++;
+                    rejectedFromCodeExam++;
+                    break;
+                    
+                case 'interview':
+                    // Application passed: applied → cognitive → digital → code → reached physical → rejected
+                    cognitiveCount++;
+                    digitalInterviewCount++;
+                    codeExamCount++;
+                    physicalInterviewCount++;
+                    rejectedFromPhysicalInterview++;
+                    break;
+                    
+                case 'offer':
+                    // Application passed everything, reached offer, then rejected
+                    cognitiveCount++;
+                    digitalInterviewCount++;
+                    codeExamCount++;
+                    physicalInterviewCount++;
+                    offerCount++;
+                    rejectedFromOffer++;
+                    break;
+            }
+        }
+
+        
+
+        function processActiveApplication(app: Application, status: string) {
+
+            console.log('Processing status:', status);
+
+            //Adding this as every active application will have had to be set to 'applied' at a minimum
+            appliedCount++;
+            
+            switch (status) {
+                case 'applied':
+                    currentApplied++;
+                    break;
+                    
+                case 'cognitivetesting':
+                    cognitiveCount++;
+                    currentCognitive++;
+                    break;
+                    
+                case 'digitalinterview': 
+                    cognitiveCount++;
+                    digitalInterviewCount++;
+                    currentDigitalInterview++;
+                    break;
+                    
+                case 'codeexam':
+                    cognitiveCount++;
+                    digitalInterviewCount++;
+                    codeExamCount++;
+                    currentCodeExam++;
+                    break;
+                    
+                case 'interview':
+                    cognitiveCount++;
+                    digitalInterviewCount++;
+                    codeExamCount++;
+                    physicalInterviewCount++;
+                    currentPhysicalInterview++;
+                    break;
+                    
+                case 'offer':
+                    cognitiveCount++;
+                    digitalInterviewCount++;
+                    codeExamCount++;
+                    physicalInterviewCount++;
+                    offerCount++;
+                    currentOffer++;
+                    break;
+                    
+                default:
+                    // Unknown status, put in applied as default. Although slight potential to cause issues.
+                    currentApplied++;
+                    break;
+            }
+        }
+
+        function buildFunnelArray() {
+
+            const totalCounts = [
+                appliedCount,
+                cognitiveCount, 
+                digitalInterviewCount,
+                codeExamCount,
+                physicalInterviewCount,
+                offerCount
+            ];
+            
+            const currentCounts = [
+                currentApplied,
+                currentCognitive,
+                currentDigitalInterview,
+                currentCodeExam,
+                currentPhysicalInterview,
+                currentOffer
+            ];
+            
+            const rejectedCounts = [
+                rejectedFromApplied,
+                rejectedFromCognitive,
+                rejectedFromDigitalInterview,
+                rejectedFromCodeExam,
+                rejectedFromPhysicalInterview,
+                rejectedFromOffer
+            ];
+
+            return stages.map((stage, index) => {
+                const totalReached = totalCounts[index];
+                const currentCount = currentCounts[index];
+                const rejectedCount = rejectedCounts[index];
                 
-                // This application reached all stages up to and including current stage
-                for (let i = 0; i <= currentStageIndex; i++) {
-                    stageData[stages[i].key].totalReached++;
+                const percentage = totalApplications > 0 ? (totalReached / totalApplications) * 100 : 0;
+                
+                let conversionFromPrevious = 100;
+                if (index > 0) {
+                    const previousTotal = totalCounts[index - 1];
+                    conversionFromPrevious = previousTotal > 0 ? (totalReached / previousTotal) * 100 : 0;
                 }
+                
+                const rejectionRate = totalReached > 0 ? (rejectedCount / totalReached) * 100 : 0;
+
+                return {
+                    ...stage,
+                    count: currentCount,
+                    rejectedCount,
+                    totalReached,
+                    percentage: Math.round(percentage * 10) / 10,
+                    conversionFromPrevious: Math.round(conversionFromPrevious * 10) / 10,
+                    rejectionRate: Math.round(rejectionRate * 10) / 10
+                };
+            });
+        }
+
+        // Step 4: Process each application ONE BY ONE
+        applications.forEach(app => {
+            const status = app.status.toLowerCase();
+
+            console.log('Decider for function to use:', status);
+            
+            if (status === 'rejected') {
+                processRejectedApplication(app);
             } else {
-                // Handle unknown statuses by putting them in 'applied'
-                stageData['applied'].current++;
-                stageData['applied'].totalReached++;
+                processActiveApplication(app, status);
             }
         });
 
-        // Calculate funnel metrics
-        const funnel: FunnelData[] = stages.map((stage, index) => {
-            const data = stageData[stage.key];
-            const totalReached = data.totalReached;
-            const currentCount = data.current;
-            const rejectedCount = data.rejected;
-            
-            // Percentage of total applications that reached this stage
-            const percentage = totalApplications > 0 ? (totalReached / totalApplications) * 100 : 0;
-            
-            // Conversion rate from previous stage
-            let conversionFromPrevious = 100; // First stage is always 100%
-            if (index > 0) {
-                const previousStageReached = stageData[stages[index - 1].key].totalReached;
-                conversionFromPrevious = previousStageReached > 0 ? (totalReached / previousStageReached) * 100 : 0;
-            }
-            
-            // Rejection rate at this stage
-            const rejectionRate = totalReached > 0 ? (rejectedCount / totalReached) * 100 : 0;
+            console.log('Debug counts:', {
+                appliedCount,
+                cognitiveCount,
+                currentCognitive,
+                currentApplied,
+                applications: applications.map(app => ({
+                    status: app.status,
+                    previous_status: app.previous_status
+                }))
+            });
 
-            return {
-                ...stage,
-                count: currentCount,
-                rejectedCount,
-                totalReached,
-                percentage: Math.round(percentage * 10) / 10,
-                conversionFromPrevious: Math.round(conversionFromPrevious * 10) / 10,
-                rejectionRate: Math.round(rejectionRate * 10) / 10
-            };
-        });
-
+ 
+        const funnel = buildFunnelArray();
+        
         setFunnelData(funnel);
     };
+
+
 
     const getBarWidth = (percentage: number): string => {
         return `${Math.max(percentage, 2)}%`;
@@ -200,12 +358,16 @@ const DashFunnel: React.FC<DashFunnelProps> = ({ applications }) => {
 
     return (
         <div className="funnel-container">
-            
-            
             <div className="funnel-stages">
                 {funnelData.map((stage, index) => {
                     const Icon = stage.icon;
                     const isFirst = index === 0;
+                    const isLast = index === funnelData.length - 1;
+                    
+                    // Calculate how many moved past this stage (for non-last stages)
+                    const movedPast = !isLast && index < funnelData.length - 1 
+                        ? funnelData[index + 1].totalReached 
+                        : 0;
                     
                     return (
                         <div key={stage.key} className="funnel-stage-wrapper">
@@ -225,20 +387,45 @@ const DashFunnel: React.FC<DashFunnelProps> = ({ applications }) => {
                                                 {stage.name}
                                             </h4>
                                             <div className="funnel-metrics">
-                                                <span className="funnel-count">
-                                                    {stage.count} active
-                                                    {stage.rejectedCount > 0 && (
-                                                        <span className="funnel-rejected"> • {stage.rejectedCount} rejected</span>
-                                                    )}
-                                                </span>
-                                                {!isFirst && (
-                                                    <span className="funnel-conversion">
-                                                        {stage.conversionFromPrevious}% advance rate
+                                                {/* Show current count for this stage */}
+                                                {stage.count > 0 && (
+                                                    <span className="funnel-current">
+                                                        {stage.count} currently here
                                                     </span>
                                                 )}
-                                                {stage.rejectionRate > 0 && (
+                                                
+                                                {/* Show how many advanced past this stage */}
+                                                {!isLast && movedPast > 0 && (
+                                                    <span className="funnel-passed">
+                                                        {movedPast} advanced
+                                                    </span>
+                                                )}
+                                                
+                                                {/* Show rejected count */}
+                                                {stage.rejectedCount > 0 && (
+                                                    <span className="funnel-rejected">
+                                                        {stage.rejectedCount} rejected
+                                                    </span>
+                                                )}
+                                                
+                                                {/* Show conversion rate from previous stage */}
+                                                {!isFirst && (
+                                                    <span className="funnel-conversion">
+                                                        {stage.conversionFromPrevious}% conversion rate from previous stage
+                                                    </span>
+                                                )}
+                                                
+                                                {/* Show what percentage were rejected at this stage */}
+                                                {stage.rejectedCount > 0 && stage.totalReached > 0 && (
                                                     <span className="funnel-rejection">
-                                                        {stage.rejectionRate}% rejection rate
+                                                        {Math.round((stage.rejectedCount / stage.totalReached) * 100)}% rejected here
+                                                    </span>
+                                                )}
+                                                
+                                                {/* Show completion rate for final stage */}
+                                                {isLast && stage.totalReached > 0 && (
+                                                    <span className="funnel-completion">
+                                                        Success rate: {stage.percentage}%
                                                     </span>
                                                 )}
                                             </div>
@@ -250,7 +437,7 @@ const DashFunnel: React.FC<DashFunnelProps> = ({ applications }) => {
                                             {stage.percentage}%
                                         </div>
                                         <div className="funnel-total">
-                                            {stage.totalReached} reached
+                                            {stage.totalReached} total reached
                                         </div>
                                     </div>
                                 </div>
@@ -267,8 +454,6 @@ const DashFunnel: React.FC<DashFunnelProps> = ({ applications }) => {
                     );
                 })}
             </div>
-            
-            
         </div>
     );
 };

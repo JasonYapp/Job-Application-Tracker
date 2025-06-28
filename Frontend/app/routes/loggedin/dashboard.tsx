@@ -17,9 +17,6 @@ interface Application {
     updated_at: string;
 }
 
-interface ApplicationDataResponse {
-    applications: Application[];
-}
 
 interface ChartData {
     stage: string;
@@ -37,18 +34,6 @@ const Dashboard = () => {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
-
-  // Your existing stage order and colors
-  const stageOrder: Array<keyof StageColors> = ['applied', 'cognitive testing', 'code exam', 'interview', 'offer', 'rejected'];
-  
-  const colors = {
-    'applied': '#3B82F6',
-    'cognitive testing': '#8B5CF6', 
-    'code exam': '#06B6D4',
-    'interview': '#10B981',
-    'offer': '#22C55E',
-    'rejected': '#EF4444'
-  };
 
   const fetchApplications = async () => {
     try {
@@ -80,42 +65,6 @@ const Dashboard = () => {
     fetchApplications();
   }, []);
 
-
-  const calculateSuccessRates = () => {
-    if (applications.length === 0) {
-      return [];
-    }
-
-    const totalApplications = applications.length;
-    const stageCounts: { [key: string]: number } = {};
-
-    applications.forEach(app => {
-      const status = app.status.toLowerCase();
-      stageCounts[status] = (stageCounts[status] || 0) + 1;
-    });
-
-    const successfulApplications = applications.filter(app => 
-      app.status.toLowerCase() !== 'rejected'
-    ).length;
-
-    const successRate = totalApplications > 0 ? (successfulApplications/totalApplications) * 100 : 0;
-
-    const chartData = stageOrder.map(stage => {
-      const count = stageCounts[stage] || 0;
-      const percentage = totalApplications > 0 ? (count/totalApplications) * 100 : 0;
-
-      return {
-        stage: stage.charAt(0).toUpperCase() + stage.slice(1),
-        percentage: Math.round(percentage * 100) /100,
-        count: count,
-        color: colors[stage]
-      };
-    }).filter(item => item.count > 0);
-
-    return chartData;
-  };
-
-  const chartData = calculateSuccessRates();
 
   // Calculate stats for the stats boxes
   const totalApplications = applications.length;

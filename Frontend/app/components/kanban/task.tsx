@@ -24,7 +24,6 @@ interface TaskProps {
 
 const Task = ({ application, onApplicationDeleted }: TaskProps) => {
 
-    const [showNewAppForm, setShowNewAppForm] = useState(false);
     const navigate = useNavigate();
 
     const handleDelete = async () => {
@@ -52,9 +51,7 @@ const Task = ({ application, onApplicationDeleted }: TaskProps) => {
         }
     };
 
-    const deletePopUp = () => {
-        setShowNewAppForm(true);
-    }
+    
 
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
         id: application.id,
