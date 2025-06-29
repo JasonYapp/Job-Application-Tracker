@@ -42,7 +42,8 @@ const addApplication = ({ onSuccess }: AddApplicationProps) => {
                       salary_range: salary,
                       status: progressionStatus,
                       job_url: jobLink,
-                      notes: notes
+                      notes: notes,
+                      previous_status: progressionStatus
                   })
                 });
                   

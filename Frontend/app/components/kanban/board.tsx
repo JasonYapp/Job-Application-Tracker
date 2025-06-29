@@ -28,6 +28,7 @@ const Board = () => {
         notes?: string;
         created_at: string;
         updated_at: string;
+        previous_status?: string;
     }
 
     const [applications, setApplications] = useState<Application[]>([]);

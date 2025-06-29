@@ -172,9 +172,9 @@ app.post('/api/auth/application', async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decoded.userId;
         
-        const { job_title, company_name, salary_range, status, job_url, notes} = req.body;
+        const { job_title, company_name, salary_range, status, job_url, notes, previous_status} = req.body;
 
-        if (!job_title || !company_name || !salary_range || !status || !job_url) {
+        if (!job_title || !company_name || !salary_range || !status || !job_url || !previous_status) {
                 return res.status(400).json({ 
                     message: 'Missing required fields: job title, company name, salary, status, and job URL are required' 
                 });
@@ -186,9 +186,9 @@ app.post('/api/auth/application', async (req, res) => {
         const [result] = await connection.execute(
             `INSERT INTO applications (
                 user_id, company_name, job_title, status,  
-                salary_range, job_url, notes
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [userId, company_name, job_title, status, salary_range, job_url, notes || null]
+                salary_range, job_url, notes, previous_status
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [userId, company_name, job_title, status, salary_range, job_url, notes || null, previous_status]
         );
 
         await connection.end();
@@ -234,7 +234,7 @@ app.get('/api/auth/ApplicationData', async (req, res) => {
         
         const [result] = await connection.execute(
             `SELECT id, user_id, company_name, job_title, status, 
-                salary_range, job_url, notes, created_at, updated_at
+                salary_range, job_url, notes, created_at, updated_at, previous_status
             FROM applications
             WHERE user_id = ?
             ORDER BY status`,
@@ -316,70 +316,64 @@ app.get('/api/auth/SingleApplication/:id', async (req, res) => {
 //Update Application Data Route - UPDATES STATUS ONLY
 app.put('/api/auth/ApplicationUpdateStatus', async (req, res) => {
     try {
-
-        //get userID from token first
+        const { id, status: newStatus } = req.body;
+        
         const token = req.headers.authorization?.split(' ')[1];
-
-        if (!token){
+        if (!token) {
             return res.status(401).json({message:'No token provided'});
         }
-
+        
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decoded.userId;
-
-        const { id, status } = req.body; //gets the applicationID and status from the request body
-
-         if (!id || !status) {
-            return res.status(400).json({message: 'Application ID and status are required'});
-        }
         
-
         const connection = await mysql.createConnection(dbConfig);
         
-        const [result] = await connection.execute(
-            `UPDATE applications 
-             SET status = ?, updated_at = NOW() 
-             WHERE id = ? AND user_id = ?`,
-            [status, id, userId]
+        // First, get the current status (this will become previous_status)
+        const [currentApp] = await connection.execute(
+            `SELECT status FROM applications WHERE id = ? AND user_id = ?`,
+            [id, userId]
         );
-
-        // Check if any rows were affected (i.e., if the application exists and belongs to the user)
-        if (result.affectedRows === 0) {
+        
+        if (!currentApp || currentApp.length === 0) {
             await connection.end();
-            return res.status(404).json({message: 'Application not found or not authorized'});
+            return res.status(404).json({ message: 'Application not found' });
         }
-
-        // Fetch and return the updated applications list
-        const [applications] = await connection.execute(
+        
+        const previousStatus = currentApp[0].status;
+        
+        // Update the application with new status and previous_status
+        await connection.execute(
+            `UPDATE applications 
+             SET status = ?, previous_status = ?, updated_at = NOW() 
+             WHERE id = ? AND user_id = ?`,
+            [newStatus, previousStatus, id, userId]
+        );
+        
+        // Fetch and return all updated applications
+        const [result] = await connection.execute(
             `SELECT id, user_id, company_name, job_title, status, 
-                salary_range, job_url, notes, created_at, updated_at
+                salary_range, job_url, notes, created_at, updated_at, previous_status
             FROM applications
             WHERE user_id = ?
             ORDER BY status`,
             [userId]
         );
-
+        
         await connection.end();
-
+        
         res.json({
             success: true,
-            applications: applications
+            applications: result
         });
-
-
+        
     } catch (error) {
-        console.error('Error fetching applications:', error);
-
-        if (error.name === 'JsonWebTokenError') {
-            return res.status(401).json({ message: 'Invalid token' });
-        }
-
+        console.error('Error updating application:', error);
         res.status(500).json({ 
-        message: 'Internal server error',
-        details: error.message 
+            message: 'Internal server error',
+            details: error.message 
         });
     }
-})
+});
 
 
 
@@ -403,10 +397,10 @@ app.put('/api/auth/EditApplication/:id', async (req, res) => {
             return res.status(400).json({ message: 'Invalid application ID' });
         }
 
-        const { job_title, company_name, salary_range, status, job_url, notes } = req.body;
+        const { job_title, company_name, salary_range, status, job_url, notes, previous_status} = req.body;
 
         // Validate required fields
-        if (!job_title || !company_name || !salary_range || !status || !job_url) {
+        if (!job_title || !company_name || !salary_range || !status || !job_url || !previous_status) {
             return res.status(400).json({
                 message: 'Missing required fields: job title, company name, salary, status, and job URL are required'
             });
@@ -430,9 +424,9 @@ app.put('/api/auth/EditApplication/:id', async (req, res) => {
         const [result] = await connection.execute(
             `UPDATE applications 
              SET company_name = ?, job_title = ?, status = ?, 
-                 salary_range = ?, job_url = ?, notes = ?, updated_at = NOW()
+                 salary_range = ?, job_url = ?, notes = ?, previous_status = ?,updated_at = NOW()
              WHERE id = ? AND user_id = ?`,
-            [company_name, job_title, status, salary_range, job_url, notes || null, applicationId, userId]
+            [company_name, job_title, status, salary_range, job_url, notes || null, previous_status, applicationId, userId]
         );
 
         await connection.end();

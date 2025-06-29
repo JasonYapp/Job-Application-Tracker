@@ -9,6 +9,7 @@ interface Application {
     company_name: string;
     job_title: string;
     status: string;
+    previous_status?: string;
     salary_range?: string;
     job_url?: string;
     notes?: string;
@@ -105,7 +106,8 @@ const EditTask = ({ onSuccess}: EditProps) => {
                         salary_range: salary,
                         status: progressionStatus,
                         job_url: jobLink,
-                        notes: notes
+                        notes: notes,
+                        previous_status: progressionStatus 
                     })
                 });
     
