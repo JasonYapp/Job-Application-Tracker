@@ -529,6 +529,63 @@ app.delete('/api/auth/DeleteApplication/:id', async (req, res) => {
 
 
 
+//Tasks route (add tasks)
+app.post('/api/auth/task', async (req, res) => {
+    try {
+
+        //get userID from token first
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token){
+            return res.status(401).json({message:'No token provided'});
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+        
+        const { title, description, due_date, due_time, job_application_id  } = req.body;
+
+        if (!title || !description || !due_date || !due_time || !job_application_id  ) {
+                return res.status(400).json({ 
+                    message: 'Missing required fields' 
+                });
+            }
+        
+        
+        const connection = await mysql.createConnection(dbConfig);
+        
+        const [result] = await connection.execute(
+            `INSERT INTO tasks (
+                user_id, title,  
+                description, due_date, due_time, job_application_id
+            ) VALUES (?, ?, ?, ?, ?, ?)`,
+            [userId, title, description || null, due_date, due_time, job_application_id]
+        );
+
+        await connection.end();
+
+        res.status(201).json({
+            message: 'Task successfully created',
+            applicationId: result.insertId
+        })
+
+
+    } catch (error) {
+        console.error('Database error:', error);
+
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+
+        res.status(500).json({ 
+        message: 'Internal server error',
+        details: error.message 
+        });
+    }
+})
+
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

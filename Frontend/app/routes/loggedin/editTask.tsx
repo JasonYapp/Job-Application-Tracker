@@ -3,6 +3,9 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 
+import UpcomingTasks from 'app/components/upcomingTasks/upcomingTasks';
+
+
 interface Application {
     id: number;
     user_id: number;
@@ -24,7 +27,7 @@ interface EditProps {
     
 }
 
-const EditTask = ({ onSuccess}: EditProps) => {
+const EditTask = ({ application, onSuccess}: EditProps) => {
     const { id } = useParams();
     const [fetchLoading, setFetchLoading] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -36,7 +39,7 @@ const EditTask = ({ onSuccess}: EditProps) => {
     const [jobLink, setJobLink] = useState('');
     const [notes, setNotes] = useState('');
     const [progressionStatus, setProgressionStatus] = useState('');
-    const [application, setApplication] = useState(null);
+    const [applicationState, setApplicationState] = useState(null);
     const navigate = useNavigate();
 
 
@@ -60,7 +63,7 @@ const EditTask = ({ onSuccess}: EditProps) => {
                 const data = await response.json();
 
                 if (response.ok) {
-                    setApplication(data);
+                    setApplicationState(data);
                     populateForm(data);
                 } else {
                     setError(data.message || 'Failed to fetch application');
@@ -174,120 +177,125 @@ const EditTask = ({ onSuccess}: EditProps) => {
         <>
             <div className='background'>
                 <div style={{ paddingTop: '2rem' }}>
-                    <div className="container">
 
-                    
-
-                    <form onSubmit={handleSubmit}>
+                    <div className="GridContainer">
+                        <div className="UpcomingTasks">
                             
-                            <div className="form">
-                                <h2> Edit Task</h2>
+                            <UpcomingTasks application={application} onSuccess={onSuccess}/>
+                        </div>
 
-                                {error && (
-                                    <div className="error-message" style={{ color: 'red', marginBottom: '1rem' }}>
-                                        {error}
+                        <div className="TaskContainer">
+                            <form onSubmit={handleSubmit}>
+                                    
+                                    <div className="form">
+                                        <h2> Edit Task</h2>
+
+                                        {error && (
+                                            <div className="error-message" style={{ color: 'red', marginBottom: '1rem' }}>
+                                                {error}
+                                            </div>
+                                        )}
+
+                                        <input
+                                            type="text"
+                                            name="jobTitle"
+                                            value={jobTitle}
+                                            onChange={(e) => setJobTitle(e.target.value)}
+                                            placeholder="Enter job title"
+                                            required
+                                            disabled={loading}
+                                        />
+
+                                        <input
+                                            type="text"
+                                            name="company"
+                                            value={company}
+                                            onChange={(e) => setCompany(e.target.value)}
+                                            placeholder="Company Name"
+                                            required
+                                            disabled={loading}
+                                        />
+
+                                        <input
+                                            type="number"
+                                            name="salary"
+                                            value={salary}
+                                            onChange={(e) => setSalary(e.target.value)}
+                                            placeholder="Enter salary"
+                                            required
+                                            disabled={loading}
+                                            min="0"
+                                            step="1000"
+                                        />
+
+                                        <select
+                                            name="workType"
+                                            value={workType}
+                                            onChange={(e) => setWorkType(e.target.value)}
+                                            disabled={loading}
+                                        >
+                                            <option value="">Select work type</option>
+                                            <option value="full-time">Full Time</option>
+                                            <option value="part-time">Part Time</option>
+                                            <option value="casual">Casual</option>
+                                        </select>
+
+                                        <input
+                                            type="url"
+                                            name="jobLink"
+                                            value={jobLink}
+                                            onChange={(e) => setJobLink(e.target.value)}
+                                            placeholder="Job Link"
+                                            required
+                                            disabled={loading}
+                                        />
+
+                                        <textarea
+                                            className="additional-notes"
+                                            name="notes"
+                                            value={notes}
+                                            onChange={(e) => setNotes(e.target.value)}
+                                            placeholder="Additional Notes"
+                                            disabled={loading}
+                                        />
+
+                                        <select
+                                            name="progressionStatus"
+                                            value={progressionStatus}
+                                            onChange={(e) => setProgressionStatus(e.target.value)}
+                                            required
+                                            disabled={loading}
+                                        >
+                                            <option value="">Select progression status</option> 
+                                            <option value="Applied">Applied</option>
+                                            <option value="CognitiveTesting">Cognitive Test</option>
+                                            <option value="DigitalInterview">Digital Interview</option>
+                                            <option value="CodeExam">Code Exam</option>
+                                            <option value="Interview">In-Person Interview</option>
+                                        </select>
                                     </div>
-                                )}
-
-                                <input
-                                    type="text"
-                                    name="jobTitle"
-                                    value={jobTitle}
-                                    onChange={(e) => setJobTitle(e.target.value)}
-                                    placeholder="Enter job title"
-                                    required
-                                    disabled={loading}
-                                />
-
-                                <input
-                                    type="text"
-                                    name="company"
-                                    value={company}
-                                    onChange={(e) => setCompany(e.target.value)}
-                                    placeholder="Company Name"
-                                    required
-                                    disabled={loading}
-                                />
-
-                                <input
-                                    type="number"
-                                    name="salary"
-                                    value={salary}
-                                    onChange={(e) => setSalary(e.target.value)}
-                                    placeholder="Enter salary"
-                                    required
-                                    disabled={loading}
-                                    min="0"
-                                    step="1000"
-                                />
-
-                                <select
-                                    name="workType"
-                                    value={workType}
-                                    onChange={(e) => setWorkType(e.target.value)}
-                                    disabled={loading}
-                                >
-                                    <option value="">Select work type</option>
-                                    <option value="full-time">Full Time</option>
-                                    <option value="part-time">Part Time</option>
-                                    <option value="casual">Casual</option>
-                                </select>
-
-                                <input
-                                    type="url"
-                                    name="jobLink"
-                                    value={jobLink}
-                                    onChange={(e) => setJobLink(e.target.value)}
-                                    placeholder="Job Link"
-                                    required
-                                    disabled={loading}
-                                />
-
-                                <textarea
-                                    className="additional-notes"
-                                    name="notes"
-                                    value={notes}
-                                    onChange={(e) => setNotes(e.target.value)}
-                                    placeholder="Additional Notes"
-                                    disabled={loading}
-                                />
-
-                                <select
-                                    name="progressionStatus"
-                                    value={progressionStatus}
-                                    onChange={(e) => setProgressionStatus(e.target.value)}
-                                    required
-                                    disabled={loading}
-                                >
-                                    <option value="">Select progression status</option> 
-                                    <option value="Applied">Applied</option>
-                                    <option value="CognitiveTesting">Cognitive Test</option>
-                                    <option value="DigitalInterview">Digital Interview</option>
-                                    <option value="CodeExam">Code Exam</option>
-                                    <option value="Interview">In-Person Interview</option>
-                                </select>
-                            </div>
-                        
-                            <div className='submitButton'>
-                                <button type="submit" disabled={loading}>
-                                    {loading ? 'Updating Application...' : 'Update Application'}
-                                </button>
-
                                 
-                                <button 
-                                    type="button" 
-                                    onClick={onCancel}
-                                    disabled={loading}
-                                    style={{ marginLeft: '1rem' }}
-                                >
-                                    Back to Job Progress Line
-                                </button>
-                                
-                            </div>
-                        </form>
-                        
+                                    <div className='submitButtons'>
+                                        <button type="submit" disabled={loading}>
+                                            {loading ? 'Updating Application...' : 'Update Application'}
+                                        </button>
+                                    
+                                        <button 
+                                            type="button" 
+                                            onClick={onCancel}
+                                            disabled={loading}
+                                          
+                                        >
+                                            Back to Job Progress Line
+                                        </button>
+                                    </div>
 
+                            </form>
+
+
+                        </div>
                     </div>
+
                 </div>
             </div>
         </>

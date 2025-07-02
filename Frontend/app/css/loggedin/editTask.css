@@ -4,14 +4,37 @@
     width: 100%;
 }
 
-.container {
+
+.GridContainer {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto; 
+    padding: 0 2rem; 
+}
+
+.TaskContainer {
     padding-top: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
     background: rgba(255, 255, 255, 0.95); 
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+}
+
+.UpcomingTasks {
+    padding-top: 2rem;
+    background: rgba(255, 255, 255, 0.95); 
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.UpcomingTasks h2{
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+    color:#2F4156;
 }
 
 
@@ -68,14 +91,16 @@ textarea.additional-notes:focus{
 
 
 
-.submitButton {
+.submitButtons {
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Stack vertically */
+    gap: 12px; /* Space between buttons */
     margin-top: 35px;
     margin-bottom: 35px;
 }
 
-.submitButton button {
+.submitButtons button {
+    margin: 0 auto;
     padding: 12px 24px;
     background-color: #2F4156;
     color: white;
@@ -83,15 +108,15 @@ textarea.additional-notes:focus{
     border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
-    min-width: 150px;
+    width: 80%; /* Full width of container */
     transition: background-color 0.3s ease;
 }
 
-.submitButton button:hover {
+.submitButtons button:hover {
     background-color: #729dce;
 }
 
-.submitButton button:disabled {
+.submitButtons button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
