@@ -64,6 +64,7 @@ const EditTask = ({ application, onSuccess}: EditProps) => {
 
                 if (response.ok) {
                     setApplicationState(data);
+                    
                     populateForm(data);
                 } else {
                     setError(data.message || 'Failed to fetch application');
@@ -181,7 +182,7 @@ const EditTask = ({ application, onSuccess}: EditProps) => {
                     <div className="GridContainer">
                         <div className="UpcomingTasks">
                             
-                            <UpcomingTasks application={application} onSuccess={onSuccess}/>
+                            <UpcomingTasks application={applicationState!} onSuccess={onSuccess}/>
                         </div>
 
                         <div className="TaskContainer">

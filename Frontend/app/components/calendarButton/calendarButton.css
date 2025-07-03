@@ -1,18 +1,17 @@
 .calendar-button {
-    margin-top: 15px;
-    margin-bottom: 15px;
-    padding: 12px;
-    background-color: #4285f4;
-    color: white;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background-color: #b0ccf8;
+    color: rgb(82, 82, 82);
     border: none;
     border-radius: 6px;
-    font-size: 16px;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .calendar-button:hover {
-    background-color: #3367d6;
+    background-color: #87adff;
 }
 
 .calendar-button:disabled {

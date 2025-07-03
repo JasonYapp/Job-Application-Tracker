@@ -46,10 +46,7 @@ const Task = ({ application, onApplicationDeleted }: TaskProps) => {
             }
         } catch (error) {
             console.error('Error:', error);
-        } finally {
-
-
-        }
+        } 
     };
 
     

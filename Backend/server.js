@@ -543,9 +543,9 @@ app.post('/api/auth/task', async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const userId = decoded.userId;
         
-        const { title, description, due_date, due_time, job_application_id  } = req.body;
+        const { title, description, due_date,  job_application_id  } = req.body;
 
-        if (!title || !description || !due_date || !due_time || !job_application_id  ) {
+        if (!title || !due_date || !job_application_id  ) {
                 return res.status(400).json({ 
                     message: 'Missing required fields' 
                 });
@@ -556,10 +556,9 @@ app.post('/api/auth/task', async (req, res) => {
         
         const [result] = await connection.execute(
             `INSERT INTO tasks (
-                user_id, title,  
-                description, due_date, due_time, job_application_id
+                user_id, title, description, due_date, job_application_id, is_completed
             ) VALUES (?, ?, ?, ?, ?, ?)`,
-            [userId, title, description || null, due_date, due_time, job_application_id]
+            [userId, title, description || null, due_date, job_application_id, false]
         );
 
         await connection.end();
@@ -582,6 +581,125 @@ app.post('/api/auth/task', async (req, res) => {
         details: error.message 
         });
     }
+})
+
+
+//Retrieve tasks route (fetch tasks)
+app.get('/api/auth/FetchTask/:id', async (req, res) => {
+    try {
+
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token){
+            return res.status(401).json({message:'No token provided'});
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+
+        const { id: applicationId } = req.params;
+
+        if (!applicationId) {
+            return res.status(400).json({ message: 'Application ID is required' });
+        }
+        
+        console.log('Fetching task with ID:', applicationId, 'for user:', userId);
+        
+        const connection = await mysql.createConnection(dbConfig);
+        
+        const [rows] = await connection.execute(
+            `SELECT * FROM tasks WHERE user_id = ? AND job_application_id = ?
+            ORDER BY due_date ASC`,
+            [userId, applicationId,]
+        );
+
+        await connection.end();
+
+        
+
+        res.json(rows);
+
+
+    } catch (error) {
+        console.error('Error fetching task:', error);
+
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+
+        res.status(500).json({ 
+            message: 'Internal server error',
+            details: error.message 
+        });
+    }
+})
+
+
+//Delete a task by taskID
+app.delete('/api/auth/DeleteTask/:taskID', async (req, res) => {
+    
+    try {
+        
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token){
+            return res.status(401).json({message:'No token provided'});
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+        const taskID = req.params.taskID;
+
+        // Validate taskID is a number
+        if (!taskID || isNaN(taskID)) {
+            return res.status(400).json({ message: 'Invalid task ID' });
+        }
+
+        const connection = await mysql.createConnection(dbConfig);
+
+        const [existingRows] = await connection.execute(
+            `SELECT id FROM tasks WHERE id = ? AND user_id = ?`,
+            [taskID, userId]
+        );
+
+        if (existingRows.length === 0) {
+            await connection.end();
+            return res.status(404).json({
+                message: 'Task not found or access denied'
+            });
+        }
+        
+        const [result] = await connection.execute(
+            `DELETE FROM tasks 
+             WHERE id = ? AND user_id = ?`,
+            [taskID, userId]
+        );
+
+        await connection.end();
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                message: 'Task not found or no changes made'
+            });
+        }
+
+        res.status(200).json({
+            message: 'Task deleted successfully',
+            taskID: taskID
+        });
+
+    }   catch (error) {
+        console.error('Error deleting Task:', error);
+
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+
+        res.status(500).json({ 
+        message: 'Internal server error',
+        details: error.message 
+        });
+    } 
 })
 
 

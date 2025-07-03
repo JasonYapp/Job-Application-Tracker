@@ -247,14 +247,7 @@ const Board = () => {
                     </div>
                 ) : null}
                 </DragOverlay>
-            </DndContext>
-            
-            {applications.length === 0 && (
-                <div className="empty-state">
-                
-                </div>
-            )}
-            
+            </DndContext> 
         </div>
 
     );

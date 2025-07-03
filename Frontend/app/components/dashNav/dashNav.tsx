@@ -6,15 +6,13 @@ import './dashNav.css';
 
 const DashNav = () => {
 
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
 
     const handleLogout = () => {
-        // Clear authentication data
+        
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        
-        // Redirect to home page
-        // navigate('/');
+        navigate('/');
     };
 
 
@@ -33,10 +31,12 @@ const DashNav = () => {
 
              <ul className="nav-right">
                 <li>
-                    <Link className="navLink" to="/settings">Settings</Link>
-                </li>
-                <li>
-                    <Link className="navLink" to="/">Log Out</Link>
+                    <button 
+                        className="logout"
+                        onClick={handleLogout}
+                    >
+                        Log Out
+                    </button>
                 </li>
             </ul>
         </nav>

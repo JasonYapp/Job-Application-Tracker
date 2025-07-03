@@ -17,7 +17,7 @@
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 100; /* Ensures it stays above other content */
+    z-index: 100; 
 }
 
 .nav::after {
@@ -27,7 +27,7 @@
     left: 30%;
     right: 30%;
     height: 1px;
-    background-color: rgb(189, 189, 189); /* remove line when finished with site*/
+    background-color: rgb(189, 189, 189); 
 }
 
 .nav li{
@@ -68,4 +68,23 @@
     background-color: #C8D9E6;
     border-radius: 8px;
 }
+
+.logout {
+    text-align: center;
+    padding: 0 15px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.4s;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 8px;
+}
+
+.logout:hover {
+    background-color: #C8D9E6;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
 
