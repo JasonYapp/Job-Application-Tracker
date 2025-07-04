@@ -70,20 +70,28 @@ const SignUp = () => {
 
     return (
         <>
-            <section>
+            <section className='signup-background'>
+                
+                <div className="bg-element3"></div>
+                <div className="bg-element3"></div>
+                <div className="bg-element3"></div>
+                <div className="bg-element3"></div>
+                <div className="bg-element3"></div>
+                <div className="bg-element3"></div>
+                <div className="pulse-element3"></div>
+                <div className="pulse-element3"></div>
+                <div className="pulse-element3"></div>
+                <div className="pulse-element3"></div>
+                <div className="pulse-element3"></div>
+                <div className="pulse-element3"></div>
+                
                 <div style={{ paddingTop: '4rem' }}>
                     <div className='signUpContainer'>
                         <h1 className="header">Sign Up</h1>
                         <p className="tagline">Please enter your details to sign up!</p>
                         
                         {error && (
-                            <div className="error-message" style={{ 
-                                color: 'red', 
-                                marginBottom: '1rem',
-                                padding: '0.5rem',
-                                backgroundColor: '#ffe6e6',
-                                borderRadius: '4px'
-                            }}>
+                            <div className="error-message">
                                 {error}
                             </div>
                         )}
@@ -99,7 +107,6 @@ const SignUp = () => {
                                     required
                                     disabled={loading}
                                 />
-
                                 <input
                                     type="phone"
                                     name="phone"
@@ -109,7 +116,6 @@ const SignUp = () => {
                                     required
                                     disabled={loading}
                                 />
-
                                 <input
                                     type="email"
                                     name="email"
@@ -119,7 +125,6 @@ const SignUp = () => {
                                     required
                                     disabled={loading}
                                 />
-
                                 <input
                                     type="password"
                                     name="password"
@@ -129,7 +134,6 @@ const SignUp = () => {
                                     required
                                     disabled={loading}
                                 />
-
                                 <input
                                     type="password"
                                     name="confirmPassword"
@@ -147,8 +151,6 @@ const SignUp = () => {
                                 </button>
                             </div>
                         </form>
-
-                        <h2> or </h2>
                     </div>
                 </div>
             </section>

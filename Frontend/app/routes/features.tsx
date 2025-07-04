@@ -9,12 +9,18 @@ const Features = () => {
         
         <>
         <div className='features-landing-container'>
-        <div className="bg-element"></div>
-        <div className="bg-element"></div>
-        <div className="bg-element"></div>
-        <div className="pulse-element"></div>
-        <div className="pulse-element"></div>
-        <div className="pulse-element"></div>
+        <div className="bg-element2"></div>
+        <div className="bg-element2"></div>
+        <div className="bg-element2"></div>
+        <div className="bg-element2"></div>
+        <div className="bg-element2"></div>
+        <div className="bg-element2"></div>
+        <div className="pulse-element2"></div>
+        <div className="pulse-element2"></div>
+        <div className="pulse-element2"></div>
+        <div className="pulse-element2"></div>
+        <div className="pulse-element2"></div>
+        <div className="pulse-element2"></div>
 
             
                 <div className="box-container">

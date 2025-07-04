@@ -54,13 +54,25 @@ const Login = () => {
     return(
         
         <>
-            <section>
+            <section className='login-background'>
+                
+                <div className="bg-element2"></div>
+                <div className="bg-element2"></div>
+                <div className="bg-element2"></div>
+                <div className="bg-element2"></div>
+                <div className="bg-element2"></div>
+                <div className="bg-element2"></div>
+                <div className="pulse-element2"></div>
+                <div className="pulse-element2"></div>
+                <div className="pulse-element2"></div>
+                <div className="pulse-element2"></div>
+                <div className="pulse-element2"></div>
+                <div className="pulse-element2"></div>
+                
                 <div style={{ paddingTop: '6rem' }}>
                     <div className='loginContainer'>
                         <h1 className="header">Login</h1>
-
                         <p className="tagline">Please enter your details to login to your account</p>
-
                         
                         <form>
                             <div className="form">
@@ -72,7 +84,6 @@ const Login = () => {
                                     placeholder="Enter your email"
                                     disabled={loading}
                                 />
-
                                 <input
                                     type="password"
                                     name="password"
@@ -82,18 +93,14 @@ const Login = () => {
                                     disabled={loading}
                                 />
                             </div>
-
                             <div className='submitButton'>
-                                <button type="button" onClick={handleSubmit} disabled={loading}> Log in </button>
+                                <button type="button" onClick={handleSubmit} disabled={loading}>
+                                    Log in
+                                </button>
                             </div>
-
                         </form>
-
-                        <h2> or </h2>
-  
                     </div>
                 </div>
-
             </section>
         </>
        
