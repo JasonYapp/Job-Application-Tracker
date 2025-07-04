@@ -28,7 +28,7 @@ const Home = () => {
                         <header> From application to offer - every step in one place.</header>
 
                             <div className="tagline">
-                                <p>With details and reminders on interviews, deadlines and those pesky questionaires, Mission Employment is job tracking made simple.</p>
+                                <p>With details and reminders on interviews, deadlines and those pesky questionnaires, Mission Employment is job tracking made simple.</p>
                             </div>
 
                         <button className="sign-up">Start Your Journey</button>
@@ -37,7 +37,7 @@ const Home = () => {
                     <section className='second-box'>
                         <div className='second-box-content'>
                             <h3>Stay Organized, <br></br>Stay Ahead </h3>
-                            <p> A tool to keep you organised. The days of being overwhelmed are gone. With text reminders and calendar integration, never miss another opportunity.</p>
+                            <p>A tool to keep you organized throughout your job search journey. Manage interview schedules, and monitor your progress all in one place. Stay on top of deadlines and never miss an important follow-up again."</p>
                         </div>
 
                         <div className="second-box-task">

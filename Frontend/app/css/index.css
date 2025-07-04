@@ -202,41 +202,40 @@ header {
 
 
 /* Pulse animation for engagement */
-        .pulse-element {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            animation: pulse 3s infinite;
-        }
+.pulse-element {
+position: absolute;
+width: 20px;
+height: 20px;
+background: rgba(255, 255, 255, 0.6);
+border-radius: 50%;
+animation: pulse 3s infinite;
+}
 
-        .pulse-element:nth-child(4) {
-            top: 5%;
-            left: 5%;
-            animation-delay: 0s;
-        }
+.pulse-element:nth-child(4) {
+top: 5%;
+left: 5%;
+animation-delay: 0s;
+}
 
-        .pulse-element:nth-child(5) {
-            top: 60%;
-            left: 8%;
-            animation-delay: 1s;
-        }
+.pulse-element:nth-child(5) {
+top: 60%;
+left: 8%;
+animation-delay: 1s;
+}
 
-        .pulse-element:nth-child(6) {
-            top: 40%;
-            left: 85%;
-            animation-delay: 1s;
-        }
+.pulse-element:nth-child(6) {
+top: 40%;
+left: 85%;
+animation-delay: 2s;
+}
 
-        @keyframes pulse {
-            0% {
-                transform: scale(0);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
+@keyframes pulse {
+0% {
+transform: scale(0);
+opacity: 1;
+}
+100% {
+transform: scale(4);
+opacity: 0;
+}
+}
