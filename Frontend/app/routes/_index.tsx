@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import '../css/index.css';
 import KanBanView from '../images/KanBanView.png';
 import UpcomingTasks from '../images/UpcomingTasks.png';
@@ -31,7 +32,9 @@ const Home = () => {
                                 <p>With details and reminders on interviews, deadlines and those pesky questionnaires, Mission Employment is job tracking made simple.</p>
                             </div>
 
-                        <button className="sign-up">Start Your Journey</button>
+                        <Link to="/signup" className="sign-up">
+                            <button>Start Your Journey</button>
+                        </Link>
                     </section>
 
                     <section className='second-box'>

@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import '../css/about.css';
 
 
@@ -68,7 +69,9 @@ const About = () => {
                     <section className="sign-up-section">
                         <h3>Ready to Take Control?</h3>
                         <p>Join other job seekers who've transformed their search from chaos to clarity with Mission Employment.</p>
-                        <a href="#" className="sign-up-button">Start Your Journey</a>
+                        <Link to="/signup" className="sign-up-button">
+                            <button>Start Your Journey</button>
+                        </Link>
                     </section>
 
                 </div>

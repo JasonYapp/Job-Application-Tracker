@@ -20,6 +20,9 @@ const dbConfig = {
     port: process.env.DB_PORT
 };
 
+
+
+
 // Test route
 app.get('/api/test', async (req, res) => {
     try {
@@ -83,6 +86,51 @@ app.post('/api/auth/signup', async (req, res) => {
             details: error.message 
         });
     }
+});
+
+//Set new password route
+app.put('/api/auth/ForgotPassword', async (req,res) =>{
+    const {email, newPassword} = req.body;
+
+    // Validate input
+    if (!email || !newPassword) {
+        return res.status(400).json({ 
+            message: 'Email or new password are required' 
+        });
+    }
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+
+        const[user] = await connection.execute(
+            'SELECT * FROM users WHERE email =?',
+            [email]
+        );
+
+        
+        if (user.length === 0) {
+            return res.status(401).json({ 
+                message: 'Invalid email' 
+            });
+        }
+
+
+
+
+        try {
+
+
+
+        }   catch (error){
+
+        }
+
+
+    }   catch (error){
+
+    }
+
+
 });
 
 

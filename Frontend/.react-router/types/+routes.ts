@@ -25,6 +25,9 @@ type Pages = {
   "/signup": {
     params: {};
   };
+  "/forgotpassword": {
+    params: {};
+  };
   "/dashboard": {
     params: {};
   };
@@ -44,11 +47,11 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/features" | "/about" | "/login" | "/signup" | "/dashboard" | "/settings" | "/progressLine" | "/editTask/:id";
+    page: "/" | "/features" | "/about" | "/login" | "/signup" | "/forgotpassword" | "/dashboard" | "/settings" | "/progressLine" | "/editTask/:id";
   };
   "routes/_layout.tsx": {
     id: "routes/_layout";
-    page: "/" | "/features" | "/about" | "/login" | "/signup";
+    page: "/" | "/features" | "/about" | "/login" | "/signup" | "/forgotpassword";
   };
   "routes/_index.tsx": {
     id: "routes/_index";
@@ -69,6 +72,10 @@ type RouteFiles = {
   "routes/signup.tsx": {
     id: "routes/signup";
     page: "/signup";
+  };
+  "routes/forgotpassword.tsx": {
+    id: "routes/forgotpassword";
+    page: "/forgotpassword";
   };
   "routes/loggedin/_layout.tsx": {
     id: "routes/loggedin/_layout";

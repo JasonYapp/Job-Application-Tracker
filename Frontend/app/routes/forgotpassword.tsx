@@ -1,11 +1,9 @@
-import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
+import '../css/forgotpassword.css'
+import { useState, type FormEvent } from 'react';
 
-import '../css/login.css';
 
-
-const Login = () => {
-
+const ForgotPassword = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -51,8 +49,9 @@ const Login = () => {
         }
     }
 
-    return(
-        
+
+
+    return (
         <>
             <section className='login-background'>
                 
@@ -70,12 +69,12 @@ const Login = () => {
                 <div className="pulse-element2"></div>
                 
                 <div style={{ paddingTop: '6rem' }}>
-                    <div className='loginContainer'>
-                        <h1 className="header">Login</h1>
-                        <p className="tagline">Please enter your details to login to your account</p>
+                    <div className='forgotpwContainer'>
+                        <h1 className="header">Reset Your Password</h1>
+                        <p className="tagline">Your password will be reset if the account exists</p>
                         
                         <form>
-                            <div className="form">
+                            <div className="forgotpwform">
                                 <input
                                     type="email"
                                     name="email"
@@ -89,17 +88,10 @@ const Login = () => {
                                     name="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Enter your password"
+                                    placeholder="Enter your new password"
                                     disabled={loading}
                                 />
                             </div>
-
-                            <div className="forgot-password">
-                                <Link to="/forgotpassword" className="forgot-password-link">
-                                    Forgot your password?
-                                </Link>
-                            </div>
-
 
                             <div className='submitButton'>
                                 <button type="button" onClick={handleSubmit} disabled={loading}>
@@ -111,9 +103,8 @@ const Login = () => {
                 </div>
             </section>
         </>
-       
     );
 }
 
 
-export default Login;
+export default ForgotPassword;

@@ -7,6 +7,7 @@ export default [
     route("about", "routes/about.tsx"),
     route("login", "routes/login.tsx"),
     route("signup", "routes/signup.tsx"),
+    route("forgotpassword", "routes/forgotpassword.tsx"),
     // Add more public routes here. ONLY PUBLIC
   ]),
 

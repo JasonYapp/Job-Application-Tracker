@@ -17,7 +17,7 @@
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 100; /* Ensures it stays above other content */
+    z-index: 100; 
 }
 
 .nav::after {
@@ -27,7 +27,7 @@
     left: 30%;
     right: 30%;
     height: 1px;
-    background-color: rgb(189, 189, 189); /* remove line when finished with site*/
+    background-color: rgb(189, 189, 189); 
 }
 
 .nav li{
@@ -65,6 +65,6 @@
 }
 
 .navLink:hover {
-    background-color: #C8D9E6;
+    background: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 100%);
     border-radius: 8px;
 }
