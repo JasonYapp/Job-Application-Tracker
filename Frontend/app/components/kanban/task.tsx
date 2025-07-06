@@ -30,7 +30,7 @@ const Task = ({ application, onApplicationDeleted }: TaskProps) => {
     const handleDelete = async () => {
         
         try {
-            const response = await fetch(`http://localhost:5000/api/auth/DeleteApplication/${application.id}`, {
+            const response = await fetch(`https://job-application-tracker-production-f608.up.railway.app/api/auth/DeleteApplication/${application.id}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,

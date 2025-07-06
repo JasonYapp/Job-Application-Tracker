@@ -37,7 +37,7 @@ const SignUp = () => {
 
         try {
             // Make API call to your backend
-            const response = await fetch('http://localhost:5000/api/auth/signup', {
+            const response = await fetch('https://job-application-tracker-production-f608.up.railway.app/api/auth/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

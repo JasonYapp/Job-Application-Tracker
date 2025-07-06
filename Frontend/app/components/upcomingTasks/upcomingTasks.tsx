@@ -234,7 +234,7 @@ const UpcomingTasks = ({application, onSuccess}: UpcomingTasksProps) => {
 
     const deleteTask = async (taskID: number) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/auth/DeleteTask/${taskID}`, {
+            const response = await fetch(`https://job-application-tracker-production-f608.up.railway.app/api/auth/DeleteTask/${taskID}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
