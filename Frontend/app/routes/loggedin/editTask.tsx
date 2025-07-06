@@ -53,7 +53,7 @@ const EditTask = ({ application, onSuccess}: EditProps) => {
 
             try {
                 setFetchLoading(true);
-                const response = await fetch(`http://localhost:5000/api/auth/SingleApplication/${id}`, {
+                const response = await fetch(`https://job-application-tracker-production-f608.up.railway.app/auth/SingleApplication/${id}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -98,7 +98,7 @@ const EditTask = ({ application, onSuccess}: EditProps) => {
     
             try {
                 // Use PUT method and include application ID in URL
-                const response = await fetch(`http://localhost:5000/api/auth/EditApplication/${id}`, {
+                const response = await fetch(`https://job-application-tracker-production-f608.up.railway.app/api/auth/EditApplication/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
