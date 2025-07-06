@@ -61,7 +61,7 @@ const Board = () => {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:5000/api/auth/ApplicationData', {
+            const response = await fetch('https://job-application-tracker-production-f608.up.railway.app/api/auth/ApplicationData', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
