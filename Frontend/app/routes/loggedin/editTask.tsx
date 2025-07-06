@@ -53,7 +53,7 @@ const EditTask = ({ application, onSuccess}: EditProps) => {
 
             try {
                 setFetchLoading(true);
-                const response = await fetch(`https://job-application-tracker-production-f608.up.railway.app/auth/SingleApplication/${id}`, {
+                const response = await fetch(`https://job-application-tracker-production-f608.up.railway.app/api/auth/SingleApplication/${id}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
