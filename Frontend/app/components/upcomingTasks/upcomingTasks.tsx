@@ -159,7 +159,7 @@ const UpcomingTasks = ({application, onSuccess}: UpcomingTasksProps) => {
 
         try {
             
-            const response = await fetch('http://localhost:5000/api/auth/task', {
+            const response = await fetch('https://job-application-tracker-production-f608.up.railway.app/api/auth/task', {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json',
@@ -205,7 +205,7 @@ const UpcomingTasks = ({application, onSuccess}: UpcomingTasksProps) => {
 
     const fetchTaskCards = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/auth/FetchTask/${application.id}`, {
+            const response = await fetch(`https://job-application-tracker-production-f608.up.railway.app/api/auth/FetchTask/${application.id}`, {
                 method: 'GET',
                 headers : {
                     'Content-Type' : 'application/json',
