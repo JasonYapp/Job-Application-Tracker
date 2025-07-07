@@ -39,8 +39,8 @@ const Home = () => {
 
                     <section className='second-box'>
                         <div className='second-box-content'>
-                            <h3>Stay Organized, <br></br>Stay Ahead </h3>
-                            <p>A tool to keep you organized throughout your job search journey. Manage interview schedules, and monitor your progress all in one place. Stay on top of deadlines and never miss an important follow-up again."</p>
+                            <h3>Stay Organised, <br></br>Stay Ahead </h3>
+                            <p>A tool to keep you organised throughout your job search journey. Manage interview schedules, and monitor your progress all in one place. Stay on top of deadlines and never miss an important follow-up again."</p>
                         </div>
 
                         <div className="second-box-task">

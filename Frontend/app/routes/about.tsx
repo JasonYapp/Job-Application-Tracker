@@ -49,13 +49,13 @@ const About = () => {
 
                     <section className='story-box'>
                             <h3> From Personal Pain Point to Purpose </h3>
-                            <p> Mission Employment emerged from necessity. I needed to track every stage of every application, monitor live deadlines, and maintain organized records of each opportunity. 
-                                What began as a personal solution became something I realized the entire job-seeking community needed.
+                            <p> Mission Employment emerged from necessity. I needed to track every stage of every application, monitor live deadlines, and maintain organised records of each opportunity. 
+                                What began as a personal solution became something I realised the entire job-seeking community needed.
                             </p>
 
                             <p>
                                 Every feature addresses a real friction point I encountered during my own search. 
-                                The Kanban boards, the deadline tracking, the progress analytics - all born from moments of frustration that I knew could be solved with better organization.
+                                The Kanban boards, the deadline tracking, the progress analytics - all born from moments of frustration that I knew could be solved with better organisation.
                             </p>
                     </section>
 

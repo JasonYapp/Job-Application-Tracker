@@ -26,7 +26,7 @@ const Features = () => {
                 <div className="box-container">
 
                     <section className="first-box">
-                        <h1> The ultimate organization tool for job applications </h1> 
+                        <h1> The ultimate organisation tool for job applications </h1> 
                         <p>Everything you need to manage your job search in one powerful, intuitive platform.</p>
                     </section>
 
@@ -45,7 +45,7 @@ const Features = () => {
                     <section className='third-box'>
                         <div className='third-box-content'>
                             <h3>Visual Progress Tracking</h3>
-                            <p>See your entire job search journey at a glance with our intuitive Kanban-style board. 
+                            <p>See your entire job search journey at a glance with our Kanban-style board. 
                                 Track applications from submission to offer, 
                                 with clear visual indicators of your progress at each stage.
                             </p>
