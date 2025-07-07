@@ -239,3 +239,83 @@ transform: scale(4);
 opacity: 0;
 }
 }
+
+
+/* Mobile styling - might still need to tweak */
+@media screen and (max-width: 480px) {
+    .landing-container {
+        padding-bottom: 40px;
+    }
+    
+    .box-container {
+        padding-top: 2rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    .first-box {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 16px;
+    }
+    
+    header {
+        font-size: 1.8rem;
+        margin: auto 1rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        line-height: 1.2;
+    }
+    
+    .tagline {
+        padding: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .tagline p {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+    
+    .sign-up {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .second-box, .third-box {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-radius: 16px;
+    }
+    
+    .second-box {
+        gap: 1.5rem;
+    }
+    
+    .second-box h3, .third-box h3 {
+        font-size: 1.4rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .second-box-content p, .third-box-content p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        padding-bottom: 1rem;
+    }
+    
+    .second-box-task img, .third-box-kanban img {
+        border-radius: 12px;
+        max-height: 280px;
+    }
+    
+
+    .bg-element {
+        display: none; 
+    }
+    
+    .pulse-element {
+        width: 15px;
+        height: 15px;
+    }
+}
