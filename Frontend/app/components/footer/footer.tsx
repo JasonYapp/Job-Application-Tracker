@@ -1,4 +1,5 @@
 import './footer.css';
+import { Link } from "react-router";
 
 const Footer = () => {
     return (
@@ -17,7 +18,7 @@ const Footer = () => {
                 <div className='column-section'>
                     <h3> Company</h3>
                         <ul>
-                            <li> About Us </li>
+                            <li> <Link to="/about">About Us</Link> </li>
                             <li> Privacy Policy </li>
                             <li> Terms Of Service </li>
                         </ul>
@@ -27,8 +28,8 @@ const Footer = () => {
                 <div className='column-section'>
                     <h3> Product</h3>
                         <ul>
-                            <li> Log In</li>
-                            <li> Features </li>
+                            <li> <Link to="/login">Log In</Link></li>
+                            <li> <Link to="/features">Features</Link></li>
                             
                         </ul>
                 </div>
@@ -38,7 +39,7 @@ const Footer = () => {
                     <h3> Help </h3>
                         <ul>
                             <li> FAQS </li>
-                            <li> Get Started </li>
+                            <li> <Link to="/signup">Get Started</Link> </li>
                             <li> Contact Us </li>
                         </ul>
                 </div>
