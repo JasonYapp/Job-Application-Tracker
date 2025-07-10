@@ -4,8 +4,15 @@ const bcrypt = require('bcryptjs');
 const cors = require('cors');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const twilio = require('twilio'); //More research on twilio integration required
 
 const app = express();
+
+// Initialize Twilio client
+const twilioClient = twilio(
+    process.env.TWILIO_ACCOUNT_SID,
+    process.env.TWILIO_AUTH_TOKEN
+);
 
 // Middleware
 app.use(cors());
@@ -26,6 +33,11 @@ const dbConfig = {
 
 
 
+// Helper function to generate OTP
+function generateOTP() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
 
 // Test route
 app.get('/api/test', async (req, res) => {
@@ -39,7 +51,10 @@ app.get('/api/test', async (req, res) => {
     }
 });
 
-// Signup route
+
+
+
+// Signup route - SENDS OTP DURING SIGNUP?
 app.post('/api/auth/signup', async (req, res) => {
     const { email, password, name, phone } = req.body;
 
@@ -66,21 +81,36 @@ app.post('/api/auth/signup', async (req, res) => {
             });
         }
 
+
+        const otp = generateOTP();
+        const otpExpiry = new Date(Date.now() + 2 * 60 * 1000); 
+
+
+
         // Hash password
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // Insert new user
+
+        // THIS MAY NEED TO CHANGE. NEW DATABASE TABLE TO TEMPORARILY STORE ACCOUNT DETAILS WITH GENERATED OTP TO SEARCH AND VERIFY?? pending_users?? add otp and otpExpiry fields
         const [result] = await connection.execute(
-            'INSERT INTO users (email, password_hash, first_name, phone_number) VALUES (?, ?, ?, ?)',
-            [email, hashedPassword, name, phone]
+            'INSERT INTO pending_users (email, password_hash, first_name, phone_number, otp_code, otp_expiry) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash), first_name = VALUES(first_name), phone_number = VALUES(phone_number), otp_code = VALUES(otp_code), otp_expiry = VALUES(otp_expiry)',
+            [email, hashedPassword, name, phone, otp, otpExpiry]
         );
+
+
+        //ACTUALLY SEND SMS. Tweak 10 min timer in generateOTP()
+        await twilioClient.messages.create({
+            body: `Your verification code is ${otp}. This code will expire after 2 minutes.`,
+            from: process.env.TWILIO_PHONE_NUMBER,
+            to: phone
+        })
 
         await connection.end();
 
-        res.status(201).json({
-            message: 'User created successfully',
-            userId: result.insertId
+        res.status(200).json({
+            message: 'OTP sent successfully. Please verify your phone number.',
+            email: email // Sending back to frontend to know which user to verify
         });
 
     } catch (error) {
@@ -91,6 +121,14 @@ app.post('/api/auth/signup', async (req, res) => {
         });
     }
 });
+
+
+
+//VERIFY OTP AND COMPLETE SIGNUP ROUTE
+
+
+
+
 
 //Set new password route
 app.put('/api/auth/ForgotPassword', async (req,res) =>{

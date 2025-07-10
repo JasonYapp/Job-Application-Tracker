@@ -3,6 +3,8 @@
 
 #Dependency Directories
 node_modules/
+Backend/node_modules/
+Frontend/node_modules/
 
 # React Router
 /.react-router/
