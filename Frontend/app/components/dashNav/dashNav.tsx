@@ -31,6 +31,9 @@ const DashNav = () => {
 
              <ul className="nav-right">
                 <li>
+                    <Link className="navLink" to="/settings">Settings</Link>
+                </li> 
+                <li>
                     <button 
                         className="logout"
                         onClick={handleLogout}
