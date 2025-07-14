@@ -60,7 +60,7 @@ app.post('/api/auth/signup', async (req, res) => {
     }
 
     console.log('Attempting to send SMS to:', phone);
-    const formattedPhone = formatPhoneForTwilio(phoneNumber);
+    const formattedPhone = formatPhoneForTwilio(phone);
     console.log('Formatted phone for Twilio:', formattedPhone);
 
     // Validate input
