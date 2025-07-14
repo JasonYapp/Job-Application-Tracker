@@ -27,8 +27,6 @@ const dbConfig = {
     port: process.env.DB_PORT,
     ssl: false,
     connectTimeout: 60000,
-    acquireTimeout: 60000,
-    timeout: 60000
 };
 
 
