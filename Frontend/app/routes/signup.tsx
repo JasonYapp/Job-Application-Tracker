@@ -172,15 +172,22 @@ const SignUp = () => {
                                             required
                                             disabled={loading}
                                         />
+
+                                        <div className="phone-input-wrapper">
+                                        <span className="country-code">+61</span>
                                         <input
                                             type="tel"
                                             name="phone"
-                                            value={phone}
-                                            onChange={(e) => setPhone(e.target.value)}
-                                            placeholder="Enter your phone number (+1234567890)"
+                                            value={phone.replace('+61', '')}
+                                            onChange={(e) => setPhone('+61' + e.target.value)}
+                                            placeholder="Enter your phone number"
                                             required
                                             disabled={loading}
+                                            className="phone-digits-input"
                                         />
+                                        </div>
+
+
                                         <input
                                             type="email"
                                             name="email"
@@ -235,7 +242,7 @@ const SignUp = () => {
                                             name="otp"
                                             value={otp}
                                             onChange={(e) => setOtp(e.target.value)}
-                                            placeholder="Enter 6-digit OTP"
+                                            placeholder="Enter 6-digit code"
                                             maxLength={6}
                                             required
                                             disabled={loading}

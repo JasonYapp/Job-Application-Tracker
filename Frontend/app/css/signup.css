@@ -251,6 +251,53 @@
 }
 
 
+.phone-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgb(216, 216, 216);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.phone-input-wrapper:focus-within {
+  border-color: #74b9ff;
+  box-shadow: 0 0 10px rgba(116, 185, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.country-code {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  border-right: 1px solid rgb(216, 216, 216);
+  color: #666;
+  font-size: 16px;
+  font-weight: 500;
+  min-width: 50px;
+  text-align: center;
+}
+
+.phone-digits-input {
+  border: none !important;
+  outline: none !important;
+  padding: 12px 16px;
+  font-size: 16px;
+  flex: 1;
+  background: transparent;
+  color: #333;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.phone-digits-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+
 
 .otp-input {
     text-align: center;
