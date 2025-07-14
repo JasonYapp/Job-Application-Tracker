@@ -49,6 +49,8 @@ app.get('/api/test', async (req, res) => {
 app.post('/api/auth/signup', async (req, res) => {
     const { email, password, name, phone } = req.body;
 
+    console.log('Attempting to send SMS to:', phone);
+
     // Validate input
     if (!email || !password || !name || !phone) {
         return res.status(400).json({ 
@@ -83,6 +85,7 @@ app.post('/api/auth/signup', async (req, res) => {
             'INSERT INTO pending_users (email, password_hash, first_name, phone_number) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash), first_name = VALUES(first_name), phone_number = VALUES(phone_number)',
             [email, hashedPassword, name, phone]
         );
+
 
 
         // Send OTP using Verify API
