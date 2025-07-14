@@ -50,13 +50,21 @@ app.post('/api/auth/signup', async (req, res) => {
     const { email, password, name, phone } = req.body;
 
     function formatPhoneForTwilio(phone) {
+        console.log('Original phone:', phone);
+        
+       
         const clean = phone.replace(/\s/g, '');
+        console.log('Clean phone:', clean);
+        
         
         if (clean.startsWith('+61') && clean.length === 13) {
-            return `+61 ${clean.substring(3, 6)} ${clean.substring(6, 9)} ${clean.substring(9)}`;
+            const formatted = `+61 ${clean.substring(3, 6)} ${clean.substring(6, 9)} ${clean.substring(9)}`;
+            console.log('Adding spaces for Twilio:', formatted);
+            return formatted;
         }
-    
-    return phone; 
+        
+        console.log('No formatting applied');
+        return phone; 
     }
 
     console.log('Attempting to send SMS to:', phone);
