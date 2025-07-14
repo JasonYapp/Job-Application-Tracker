@@ -13,6 +13,9 @@ const SignUp = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [step, setStep] = useState(1); // 1 = signup form, 2 = OTP verification
+    const [userEmail, setUserEmail] = useState(''); // Store email for OTP verification
+    const [otp, setOtp] = useState('');
     
     const navigate = useNavigate();
 
@@ -35,6 +38,13 @@ const SignUp = () => {
             return;
         }
 
+
+        // Validate phone number format (basic validation)
+        if (!phone.startsWith('+')) {
+            setError('Phone number must include country code (e.g., +610412345678)');
+            setLoading(false);
+            return;
+        }
         try {
             // Make API call to your backend
             const response = await fetch('https://job-application-tracker-production-f608.up.railway.app/api/auth/signup', {
@@ -53,12 +63,13 @@ const SignUp = () => {
             const data = await response.json();
 
             if (response.ok) {
-                // Success - redirect to login or dashboard
-                console.log('User created successfully:', data);
-                navigate('/login'); // or wherever you want to redirect
+                // Successfully sent OTP
+                console.log('OTP sent successfully:', data);
+                setUserEmail(data.email);
+                setStep(2)
             } else {
                 // Handle errors from backend
-                setError(data.message || 'Failed to create account');
+                setError(data.message || 'Failed to send OTP');
             }
         } catch (error) {
             console.error('Network error:', error);
@@ -66,6 +77,58 @@ const SignUp = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+
+
+
+    // OTP verification
+    const handleOtpSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        if (!otp || otp.length !== 6) {
+            setError('Please enter a valid 6-digit OTP');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await fetch('https://job-application-tracker-production-f608.up.railway.app/api/auth/signup/verify-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: userEmail,
+                    otp: otp
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Success - account created
+                console.log('Account created successfully:', data);
+                navigate('/login');
+            } else {
+                // Handle errors from backend
+                setError(data.message || 'Invalid OTP');
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            setError('Network error. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Function to go back to signup form
+    const goBackToSignup = () => {
+        setStep(1);
+        setOtp('');
+        setError('');
     };
 
     return (
@@ -85,72 +148,119 @@ const SignUp = () => {
                 <div className="pulse-element3"></div>
                 <div className="pulse-element3"></div>
                 
-                <div style={{ paddingTop: '4rem' }}>
+                <div className="signup-container-wrapper">
                     <div className='signUpContainer'>
-                        <h1 className="header">Sign Up</h1>
-                        <p className="tagline">Please enter your details to sign up!</p>
-                        
-                        {error && (
-                            <div className="error-message">
-                                {error}
-                            </div>
-                        )}
+                        {step === 1 ? (
+                            <>
+                                <h1 className="header">Sign Up</h1>
+                                <p className="tagline">Please enter your details to sign up!</p>
+                                
+                                {error && (
+                                    <div className="error-message">
+                                        {error}
+                                    </div>
+                                )}
 
-                        <form onSubmit={handleSubmit}>
-                            <div className="form">
-                                <input
-                                    type="name"
-                                    name="name"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    placeholder="Enter your first name"
-                                    required
-                                    disabled={loading}
-                                />
-                                <input
-                                    type="phone"
-                                    name="phone"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    placeholder="Enter your phone number"
-                                    required
-                                    disabled={loading}
-                                />
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="Enter your email"
-                                    required
-                                    disabled={loading}
-                                />
-                                <input
-                                    type="password"
-                                    name="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Enter your password"
-                                    required
-                                    disabled={loading}
-                                />
-                                <input
-                                    type="password"
-                                    name="confirmPassword"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    placeholder="Re-enter your password"
-                                    required
-                                    disabled={loading}
-                                />
-                            </div>
-                        
-                            <div className='submitButton'>
-                                <button type="submit" disabled={loading}>
-                                    {loading ? 'Creating Account...' : 'Sign Up'}
-                                </button>
-                            </div>
-                        </form>
+                                <form onSubmit={handleSubmit}>
+                                    <div className="form">
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
+                                            placeholder="Enter your first name"
+                                            required
+                                            disabled={loading}
+                                        />
+                                        <input
+                                            type="tel"
+                                            name="phone"
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            placeholder="Enter your phone number (+1234567890)"
+                                            required
+                                            disabled={loading}
+                                        />
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            placeholder="Enter your email"
+                                            required
+                                            disabled={loading}
+                                        />
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            placeholder="Enter your password"
+                                            required
+                                            disabled={loading}
+                                        />
+                                        <input
+                                            type="password"
+                                            name="confirmPassword"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            placeholder="Re-enter your password"
+                                            required
+                                            disabled={loading}
+                                        />
+                                    </div>
+                                
+                                    <div className='submitButton'>
+                                        <button type="submit" disabled={loading}>
+                                            {loading ? 'Sending OTP...' : 'Send OTP'}
+                                        </button>
+                                    </div>
+                                </form>
+                            </>
+                        ) : (
+                            <>
+                                <h1 className="header">Verify Phone Number</h1>
+                                <p className="tagline">We've sent a 6-digit code to {phone}</p>
+                                
+                                {error && (
+                                    <div className="error-message">
+                                        {error}
+                                    </div>
+                                )}
+
+                                <form onSubmit={handleOtpSubmit}>
+                                    <div className="form">
+                                        <input
+                                            type="text"
+                                            name="otp"
+                                            value={otp}
+                                            onChange={(e) => setOtp(e.target.value)}
+                                            placeholder="Enter 6-digit OTP"
+                                            maxLength={6}
+                                            required
+                                            disabled={loading}
+                                            className="otp-input"
+                                        />
+                                    </div>
+                                
+                                    <div className='submitButton'>
+                                        <button type="submit" disabled={loading}>
+                                            {loading ? 'Verifying...' : 'Verify & Create Account'}
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <div className="back-button-container">
+                                    <button 
+                                        type="button" 
+                                        onClick={goBackToSignup}
+                                        className="back-button"
+                                    >
+                                        Back to Sign Up
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </section>

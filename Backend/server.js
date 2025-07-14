@@ -32,13 +32,6 @@ const dbConfig = {
 };
 
 
-
-// Helper function to generate OTP
-function generateOTP() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
-
 // Test route
 app.get('/api/test', async (req, res) => {
     try {
@@ -61,7 +54,7 @@ app.post('/api/auth/signup', async (req, res) => {
     // Validate input
     if (!email || !password || !name || !phone) {
         return res.status(400).json({ 
-            message: 'Email and password are required' 
+            message: 'All fields are required' 
         });
     }
 
@@ -82,29 +75,22 @@ app.post('/api/auth/signup', async (req, res) => {
         }
 
 
-        const otp = generateOTP();
-        const otpExpiry = new Date(Date.now() + 2 * 60 * 1000); 
-
-
-
         // Hash password
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
 
         // THIS MAY NEED TO CHANGE. NEW DATABASE TABLE TO TEMPORARILY STORE ACCOUNT DETAILS WITH GENERATED OTP TO SEARCH AND VERIFY?? pending_users?? add otp and otpExpiry fields
-        const [result] = await connection.execute(
-            'INSERT INTO pending_users (email, password_hash, first_name, phone_number, otp_code, otp_expiry) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash), first_name = VALUES(first_name), phone_number = VALUES(phone_number), otp_code = VALUES(otp_code), otp_expiry = VALUES(otp_expiry)',
-            [email, hashedPassword, name, phone, otp, otpExpiry]
+        await connection.execute(
+            'INSERT INTO pending_users (email, password_hash, first_name, phone_number) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash), first_name = VALUES(first_name), phone_number = VALUES(phone_number)',
+            [email, hashedPassword, name, phone]
         );
 
 
-        //ACTUALLY SEND SMS. Tweak 10 min timer in generateOTP()
-        await twilioClient.messages.create({
-            body: `Your verification code is ${otp}. This code will expire after 2 minutes.`,
-            from: process.env.TWILIO_PHONE_NUMBER,
-            to: phone
-        })
+        // Send OTP using Verify API
+        const verification = await twilioClient.verify.v2.services(process.env.TWILIO_VERIFY_SERVICE_SID)
+            .verifications
+            .create({ to: phone, channel: 'sms' });
 
         await connection.end();
 
@@ -125,7 +111,77 @@ app.post('/api/auth/signup', async (req, res) => {
 
 
 //VERIFY OTP AND COMPLETE SIGNUP ROUTE
+app.post('/api/auth/signup/verify-otp', async (req, res) => {
+    const {email, otp} = req.body;
 
+    if (!email || !otp){
+        return res.status(400).json({ 
+            message: 'Email and OTP are required' 
+        });
+    }
+
+    try {
+
+        const connection = await mysql.createConnection(dbConfig);
+
+        const [pendingUsers] = await connection.execute(
+            'SELECT * FROM pending_users WHERE email = ?',
+            [email]
+        );
+
+
+        if (pendingUsers.length === 0) {
+            await connection.end();
+            return res.status(400).json({ 
+                message: 'No pending signup found' 
+            });
+        }
+
+        const userData = pendingUsers[0];
+
+
+        // Verify OTP using Twilio Verify API
+        const verificationCheck = await twilioClient.verify.v2.services(process.env.TWILIO_VERIFY_SERVICE_SID)
+            .verificationChecks
+            .create({ to: userData.phone_number, code: otp });
+
+        if (verificationCheck.status !== 'approved') {
+            await connection.end();
+            return res.status(400).json({ 
+                message: 'Invalid OTP' 
+            });
+        }
+
+        // Move user to main users table
+        const [result] = await connection.execute(
+            'INSERT INTO users (email, password_hash, first_name, phone_number, phone_verified) VALUES (?, ?, ?, ?, ?)',
+            [userData.email, userData.password_hash, userData.first_name, userData.phone_number, true]
+        );
+
+        // Delete from pending users
+        await connection.execute(
+            'DELETE FROM pending_users WHERE email = ?',
+            [email]
+        );
+
+        await connection.end();
+
+
+
+        res.status(201).json({
+            message: 'User created successfully',
+            userId: result.insertId
+        });
+
+    }   catch (error){
+
+            console.error('OTP verification error:', error);
+            res.status(500).json({ 
+            message: 'Invalid or expired OTP',
+            details: error.message 
+        });
+    }
+})
 
 
 
