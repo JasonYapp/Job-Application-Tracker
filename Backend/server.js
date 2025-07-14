@@ -49,7 +49,19 @@ app.get('/api/test', async (req, res) => {
 app.post('/api/auth/signup', async (req, res) => {
     const { email, password, name, phone } = req.body;
 
+    function formatPhoneForTwilio(phone) {
+        const clean = phone.replace(/\s/g, '');
+        
+        if (clean.startsWith('+61') && clean.length === 13) {
+            return `+61 ${clean.substring(3, 6)} ${clean.substring(6, 9)} ${clean.substring(9)}`;
+        }
+    
+    return phone; 
+    }
+
     console.log('Attempting to send SMS to:', phone);
+    const formattedPhone = formatPhoneForTwilio(phoneNumber);
+    console.log('Formatted phone for Twilio:', formattedPhone);
 
     // Validate input
     if (!email || !password || !name || !phone) {
@@ -91,7 +103,7 @@ app.post('/api/auth/signup', async (req, res) => {
         // Send OTP using Verify API
         const verification = await twilioClient.verify.v2.services(process.env.TWILIO_VERIFY_SERVICE_SID)
             .verifications
-            .create({ to: phone, channel: 'sms' });
+            .create({ to: formattedPhone, channel: 'sms' });
 
         await connection.end();
 
