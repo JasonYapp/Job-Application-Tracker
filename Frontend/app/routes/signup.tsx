@@ -13,8 +13,9 @@ const SignUp = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [step, setStep] = useState(1); // 1 = signup form, 2 = OTP verification
-    const [userEmail, setUserEmail] = useState(''); // Store email for OTP verification
+    
+    const [step, setStep] = useState(1); 
+    const [userEmail, setUserEmail] = useState(''); 
     const [otp, setOtp] = useState('');
     
     const navigate = useNavigate();
