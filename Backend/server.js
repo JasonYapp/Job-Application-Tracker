@@ -57,7 +57,7 @@ app.post('/api/auth/signup', async (req, res) => {
         console.log('Clean phone:', clean);
         
         
-        if (clean.startsWith('+61') && clean.length === 13) {
+        if (clean.startsWith('+61') && (clean.length === 13 || clean.length === 12)) {
             const formatted = `+61 ${clean.substring(3, 6)} ${clean.substring(6, 9)} ${clean.substring(9)}`;
             console.log('Adding spaces for Twilio:', formatted);
             return formatted;
