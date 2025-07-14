@@ -45,18 +45,17 @@ app.get('/api/test', async (req, res) => {
 
 
 
-// Signup route - SENDS OTP DURING SIGNUP?
+// Signup route - SENDS OTP DURING SIGNUP
 app.post('/api/auth/signup', async (req, res) => {
     const { email, password, name, phone } = req.body;
 
-    
 
-    // Validate input
     if (!email || !password || !name || !phone) {
         return res.status(400).json({ 
             message: 'All fields are required' 
         });
     }
+
 
     try {
         const connection = await mysql.createConnection(dbConfig);
@@ -80,7 +79,7 @@ app.post('/api/auth/signup', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
 
-        // THIS MAY NEED TO CHANGE. NEW DATABASE TABLE TO TEMPORARILY STORE ACCOUNT DETAILS WITH GENERATED OTP TO SEARCH AND VERIFY?? pending_users?? add otp and otpExpiry fields
+        // Temporarily store user details from SignUp form (pending OTP verification)
         await connection.execute(
             'INSERT INTO pending_users (email, password_hash, first_name, phone_number) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE password_hash = VALUES(password_hash), first_name = VALUES(first_name), phone_number = VALUES(phone_number)',
             [email, hashedPassword, name, phone]
@@ -88,7 +87,7 @@ app.post('/api/auth/signup', async (req, res) => {
 
 
 
-        // Send OTP using Verify API
+        // Send OTP using Twilio Verify API
         const verification = await twilioClient.verify.v2.services(process.env.TWILIO_VERIFY_SERVICE_SID)
             .verifications
             .create({ to: phone, channel: 'sms' });
@@ -97,7 +96,7 @@ app.post('/api/auth/signup', async (req, res) => {
 
         res.status(200).json({
             message: 'OTP sent successfully. Please verify your phone number.',
-            email: email // Sending back to frontend to know which user to verify
+            email: email 
         });
 
     } catch (error) {
@@ -111,7 +110,7 @@ app.post('/api/auth/signup', async (req, res) => {
 
 
 
-//VERIFY OTP AND COMPLETE SIGNUP ROUTE
+//Verify OTP and complete Sign Up
 app.post('/api/auth/signup/verify-otp', async (req, res) => {
     const {email, otp} = req.body;
 

@@ -302,7 +302,6 @@
 .otp-input {
     text-align: center;
     font-size: 1.2rem;
-    letter-spacing: 0.5rem;
     font-weight: 600;
     padding: 1rem;
     border: 2px solid #e0e0e0;
@@ -320,6 +319,16 @@
 .back-button-container {
     margin-top: 1rem;
     text-align: center;
+}
+
+
+.tagline {
+    padding-left: 50px;
+    color: #567C8D;
+    max-width: 600px;
+    text-align: left;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
 }
 
 
