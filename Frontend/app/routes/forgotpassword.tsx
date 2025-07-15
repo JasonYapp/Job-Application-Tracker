@@ -54,7 +54,7 @@ const ForgotPassword = () => {
 
         try {
             const response = await fetch('https://job-application-tracker-production-f608.up.railway.app/api/auth/ForgotPassword-VerifyOTP', {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
