@@ -2,59 +2,227 @@ import { Link, useNavigate } from 'react-router';
 import '../css/forgotpassword.css'
 import { useState, type FormEvent } from 'react';
 
-
 const ForgotPassword = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [otp, setOtp] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    
+    const [step, setStep] = useState(1); 
+    const [successMessage, setSuccessMessage] = useState('');
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleEmailSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setError('');
         setLoading(true);
 
-        try{
-            const response = await fetch('https://job-application-tracker-production-f608.up.railway.app/api/auth/login', {
+        try {
+            const response = await fetch('https://job-application-tracker-production-f608.up.railway.app/api/auth/ForgotPassword-Send-OTP', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                })
+                body: JSON.stringify({ email })
             });
 
-        const data = await response.json();
-
-        console.log('Login response data:', data);
-        console.log('Token from response:', data.token);
+            const data = await response.json();
 
             if (response.ok) {
-                // Store the token and user data
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-
-                navigate('/dashboard');
-
+                setSuccessMessage('OTP sent to your phone number!');
+                setStep(2);
             } else {
-                setError(data.message || 'Login failed');
+                setError(data.message || 'Failed to send OTP');
             }
         } catch (error) {
             setError('An error occurred. Please try again.');
         } finally {
             setLoading(false);
         }
-    }
+    };
 
+    const handleOtpSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
 
+        try {
+            const response = await fetch('https://job-application-tracker-production-f608.up.railway.app/api/auth/ForgotPassword-VerifyOTP', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, otp })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setSuccessMessage('OTP verified! Enter your new password.');
+                setStep(3);
+            } else {
+                setError(data.message || 'Invalid OTP');
+            }
+        } catch (error) {
+            setError('An error occurred. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handlePasswordSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setError('');
+
+        if (newPassword !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+
+        if (newPassword.length < 6) {
+            setError('Password must be at least 6 characters long');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const response = await fetch('https://job-application-tracker-production-f608.up.railway.app/api/auth/ForgotPassword-ResetPassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, newPassword })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setSuccessMessage('Password reset successfully! Redirecting to login...');
+                setTimeout(() => navigate('/login'), 2000);
+            } else {
+                setError(data.message || 'Failed to reset password');
+            }
+        } catch (error) {
+            setError('An error occurred. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const renderStep = () => {
+        switch (step) {
+            case 1:
+                return (
+                    <form onSubmit={handleEmailSubmit}>
+                        <div className="forgotpwform">
+                            <input
+                                type="email"
+                                name="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Enter your email"
+                                disabled={loading}
+                                required
+                            />
+                        </div>
+                        <div className='submitButton'>
+                            <button type="submit" disabled={loading}>
+                                {loading ? 'Sending...' : 'Send OTP'}
+                            </button>
+                        </div>
+                    </form>
+                );
+
+            case 2:
+                return (
+                    <form onSubmit={handleOtpSubmit}>
+                        <div className="forgotpwform">
+                            <input
+                                type="text"
+                                name="otp"
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                                placeholder="Enter OTP"
+                                disabled={loading}
+                                required
+                            />
+                        </div>
+                        <div className='submitButton'>
+                            <button type="submit" disabled={loading}>
+                                {loading ? 'Verifying...' : 'Verify OTP'}
+                            </button>
+                        </div>
+                    </form>
+                );
+
+            case 3:
+                return (
+                    <form onSubmit={handlePasswordSubmit}>
+                        <div className="forgotpwform">
+                            <input
+                                type="password"
+                                name="newPassword"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                placeholder="Enter new password"
+                                disabled={loading}
+                                required
+                            />
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                placeholder="Confirm new password"
+                                disabled={loading}
+                                required
+                            />
+                        </div>
+                        <div className='submitButton'>
+                            <button type="submit" disabled={loading}>
+                                {loading ? 'Resetting...' : 'Reset Password'}
+                            </button>
+                        </div>
+                    </form>
+                );
+
+            default:
+                return null;
+        }
+    };
+
+    const getHeaderText = () => {
+        switch (step) {
+            case 1:
+                return 'Reset Your Password';
+            case 2:
+                return 'Enter Verification Code';
+            case 3:
+                return 'Set New Password';
+            default:
+                return 'Reset Your Password';
+        }
+    };
+
+    const getTaglineText = () => {
+        switch (step) {
+            case 1:
+                return 'Enter your email to receive an OTP';
+            case 2:
+                return 'Enter the OTP sent to your phone';
+            case 3:
+                return 'Create a new password for your account';
+            default:
+                return 'Your password will be reset if the account exists';
+        }
+    };
 
     return (
         <>
             <section className='login-background'>
-                
                 <div className="bg-element2"></div>
                 <div className="bg-element2"></div>
                 <div className="bg-element2"></div>
@@ -68,43 +236,26 @@ const ForgotPassword = () => {
                 <div className="pulse-element2"></div>
                 <div className="pulse-element2"></div>
                 
-                <div style={{ paddingTop: '6rem' }}>
+                <div className="login-background-padding">
                     <div className='forgotpwContainer'>
-                        <h1 className="header">Reset Your Password</h1>
-                        <p className="tagline">Your password will be reset if the account exists</p>
+                        <h1 className="header">{getHeaderText()}</h1>
+                        <p className="tagline">{getTaglineText()}</p>
                         
-                        <form>
-                            <div className="forgotpwform">
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="Enter your email"
-                                    disabled={loading}
-                                />
-                                <input
-                                    type="password"
-                                    name="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Enter your new password"
-                                    disabled={loading}
-                                />
-                            </div>
-
-                            <div className='submitButton'>
-                                <button type="button" onClick={handleSubmit} disabled={loading}>
-                                    Log in
-                                </button>
-                            </div>
-                        </form>
+                        {error && <div className="error-message">{error}</div>}
+                        {successMessage && <div className="success-message">{successMessage}</div>}
+                        
+                        {renderStep()}
+                        
+                        <div className="back-to-login-container">
+                            <Link to="/login" className="back-to-login">
+                                ← Back to Login
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </section>
         </>
     );
 }
-
 
 export default ForgotPassword;

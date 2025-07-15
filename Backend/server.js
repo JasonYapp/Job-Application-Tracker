@@ -186,14 +186,79 @@ app.post('/api/auth/signup/verify-otp', async (req, res) => {
 
 
 
-//Set new password route
-app.put('/api/auth/ForgotPassword', async (req,res) =>{
-    const {email, newPassword} = req.body;
+//Send OTP for Forgot Password
+app.post('/api/auth/ForgotPassword-Send-OTP', async (req,res) =>{
+    const {email} = req.body;
 
     // Validate input
-    if (!email || !newPassword) {
+    if (!email) {
         return res.status(400).json({ 
-            message: 'Email or new password are required' 
+            message: 'Email required' 
+        });
+    }
+
+    try {
+
+        const connection = await mysql.createConnection(dbConfig);
+
+        const [users] = await connection.execute(
+            'SELECT phone_number FROM users WHERE email = ?',
+            [email]
+        );
+
+
+        if (users.length === 0) {
+            await connection.end();
+            return res.status(400).json({ 
+                message: 'No account found' 
+            });
+        }
+
+        const phoneNumber = users[0].phone_number;
+
+        try {
+            
+            // Send OTP using Twilio Verify API
+            const verification = await twilioClient.verify.v2.services(process.env.TWILIO_VERIFY_SERVICE_SID)
+            .verifications
+            .create({ to: phoneNumber, channel: 'sms' });
+
+            await connection.end();
+
+            res.status(200).json({
+                message: 'OTP sent successfully. Please verify your phone number.',
+                email: email
+            });
+
+        }   catch (twilioError){
+                console.error('Twilio error:', twilioError);
+                return res.status(500).json({ 
+                    message: 'Failed to send OTP',
+                    details: twilioError.message 
+                });
+        }
+
+
+    }   catch (error){
+            console.error('Database error:', error);
+            res.status(500).json({
+                message: 'Internal server error',
+                details: error.message
+            });
+    }
+    
+})
+
+
+
+//Verify OTP for setting new password
+app.post('/api/auth/ForgotPassword-VerifyOTP', async (req,res) =>{
+    const {email, otp} = req.body;
+
+    // Validate input
+    if (!email || !otp) {
+        return res.status(400).json({ 
+            message: 'Email and OTP required' 
         });
     }
 
@@ -208,28 +273,112 @@ app.put('/api/auth/ForgotPassword', async (req,res) =>{
         
         if (user.length === 0) {
             return res.status(401).json({ 
-                message: 'Invalid email' 
+                message: 'No account found' 
             });
         }
 
-
-
+        const userData = users[0];
 
         try {
+            
+            // Verify OTP using Twilio Verify API
+            const verificationCheck = await twilioClient.verify.v2.services(process.env.TWILIO_VERIFY_SERVICE_SID)
+            .verificationChecks
+            .create({ to: userData.phone_number, code: otp });
 
+            if (verificationCheck.status !== 'approved') {
+                await connection.end();
+                return res.status(400).json({ 
+                    message: 'Invalid OTP' 
+                });
+            }
 
+            await connection.end();
 
-        }   catch (error){
+            res.status(200).json({
+                message: 'OTP verified successfully. You can now change your password.',
+                email: email 
+            });
 
+        }   catch (twilioError) {
+                console.error('Twilio verification error:', twilioError);
+                await connection.end();
+                res.status(400).json({
+                    message: 'Invalid or expired OTP',
+                    details: twilioError.message
+                });
         }
 
+    }   catch (error) {
+            console.error('OTP verification error:', error);
+            res.status(500).json({
+                message: 'Internal server error',
+                details: error.message
+            });
+    }
+});
 
-    }   catch (error){
 
+// Reset Password route - Updates password after OTP verification
+app.put('/api/auth/ForgotPassword-ResetPassword', async (req, res) => {
+    const { email, newPassword } = req.body;    
+
+    // Validate input
+    if (!email || !newPassword) {
+        return res.status(400).json({ 
+            message: 'Email and new password are required' 
+        });
     }
 
+    // Validate password strength
+    if (newPassword.length < 6) {
+        return res.status(400).json({
+            message: 'Password must be at least 6 characters long'
+        });
+    }
 
-});
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+
+        // Check if user exists
+        const [users] = await connection.execute(
+            'SELECT id FROM users WHERE email = ?',
+            [email]
+        );
+
+        if (users.length === 0) {
+            await connection.end();
+            return res.status(404).json({ 
+                message: 'No account found' 
+            });
+        }
+
+        // Hash new password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+        // Update user's password
+        await connection.execute(
+            'UPDATE users SET password_hash = ? WHERE email = ?',
+            [hashedPassword, email]
+        );
+
+        await connection.end();
+
+        res.status(200).json({
+            message: 'Password reset successfully'
+        });
+
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ 
+            message: 'Internal server error',
+            details: error.message 
+        });
+    }
+
+})
+
 
 
 // Login route
