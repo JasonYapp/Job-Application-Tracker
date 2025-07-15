@@ -10,9 +10,11 @@ const ForgotPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    
+
     const [step, setStep] = useState(1); 
     const [successMessage, setSuccessMessage] = useState('');
+
+
 
     const handleEmailSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -31,7 +33,7 @@ const ForgotPassword = () => {
             const data = await response.json();
 
             if (response.ok) {
-                setSuccessMessage('OTP sent to your phone number!');
+                setSuccessMessage('A 6 digit code has been sent to your number.');
                 setStep(2);
             } else {
                 setError(data.message || 'Failed to send OTP');
@@ -42,6 +44,8 @@ const ForgotPassword = () => {
             setLoading(false);
         }
     };
+
+
 
     const handleOtpSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -60,7 +64,6 @@ const ForgotPassword = () => {
             const data = await response.json();
 
             if (response.ok) {
-                setSuccessMessage('OTP verified! Enter your new password.');
                 setStep(3);
             } else {
                 setError(data.message || 'Invalid OTP');
@@ -71,6 +74,8 @@ const ForgotPassword = () => {
             setLoading(false);
         }
     };
+
+
 
     const handlePasswordSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -111,6 +116,8 @@ const ForgotPassword = () => {
             setLoading(false);
         }
     };
+
+
 
     const renderStep = () => {
         switch (step) {
@@ -210,9 +217,9 @@ const ForgotPassword = () => {
     const getTaglineText = () => {
         switch (step) {
             case 1:
-                return 'Enter your email to receive an OTP';
+                return 'Enter your email to reset your password';
             case 2:
-                return 'Enter the OTP sent to your phone';
+                return 'Enter the 6 digit code sent to your phone';
             case 3:
                 return 'Create a new password for your account';
             default:

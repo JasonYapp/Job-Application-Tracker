@@ -277,7 +277,7 @@ app.post('/api/auth/ForgotPassword-VerifyOTP', async (req,res) =>{
             });
         }
 
-        const userData = users[0];
+        const userData = user[0];
 
         try {
             
