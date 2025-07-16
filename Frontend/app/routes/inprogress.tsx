@@ -22,10 +22,11 @@ const InProgress = () => {
                 <div className="pulse-element2"></div>
                 <div className="pulse-element2"></div>
                 
-                <div style={{ paddingTop: '6rem' }}>
+                <div style={{ paddingTop: '7rem' }}>
                     <div className='progressContainer'>
                         <h1>In Progress</h1>
-                        <p>This part of the site is currently in progress. Coming soon!</p>
+                        <p>This part of the site is in the works!</p>
+                        <p>Coming soon.</p>
 
 
                         <Link to="/" className="backButton">

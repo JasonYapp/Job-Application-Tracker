@@ -165,6 +165,7 @@
     cursor: pointer;
     border: none;
     margin-bottom: 4rem;
+    margin: 0 auto;
 }
 
 .backButton:hover {
