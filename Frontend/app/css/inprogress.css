@@ -160,8 +160,13 @@
 }
 
 
+.button-container {
+    text-align: center;
+}
+
+
 .backButton {
-    display: block; 
+    display: inline-block; 
     padding: 1rem 2.5rem;
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
@@ -172,7 +177,7 @@
     transition: all 0.3s ease;
     cursor: pointer;
     border: none;
-    margin: 0 auto 4rem auto;
+    margin-bottom: 4rem;
 }
 
 .backButton:hover {

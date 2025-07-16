@@ -25,16 +25,19 @@ const InProgress = () => {
                 <div style={{ paddingTop: '7rem' }}>
                     <div className='progressContainer'>
                         <h1>In Progress</h1>
-                        
+
                         <div className='text'>
                             <p>This part of the site is in the works!</p>
                             <p className='secondtext'>Coming soon.</p>
                         </div>
 
-
-                        <Link to="/" className="backButton">
-                            <button>Back to the main page</button>
-                        </Link>
+                        <div className='button-container'>
+                            <Link to="/" className="backButton">
+                                <button>Back to the main page</button>
+                            </Link>
+                        </div>
+                        
+                        
                     </div>
                 </div>
             </section>
