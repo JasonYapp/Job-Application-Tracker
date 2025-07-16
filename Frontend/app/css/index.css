@@ -113,7 +113,6 @@ header {
 .sign-up:hover{
     transform: translateY(-2px);
     box-shadow: 0 10px 80px rgba(102, 126, 234, 0.6);
-
 }
 
 .second-box {

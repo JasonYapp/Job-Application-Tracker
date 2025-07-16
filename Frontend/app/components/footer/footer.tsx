@@ -18,9 +18,9 @@ const Footer = () => {
                 <div className='column-section'>
                     <h3> Company</h3>
                         <ul>
-                            <li> <Link to="/about">About Us</Link> </li>
-                            <li> Privacy Policy </li>
-                            <li> Terms Of Service </li>
+                            <li> <Link to="/about">About Us</Link> </li> 
+                            <li> <Link to="/inprogress"> Privacy Policy</Link></li>
+                            <li> <Link to="/inprogress"> Terms of Service </Link></li>
                         </ul>
                 </div>
 
@@ -38,9 +38,9 @@ const Footer = () => {
                 <div className='column-section'>
                     <h3> Help </h3>
                         <ul>
-                            <li> FAQS </li>
+                            <li> <Link to="/inprogress"> FAQS </Link></li>
                             <li> <Link to="/signup">Get Started</Link> </li>
-                            <li> Contact Us </li>
+                            <li> <Link to="/inprogress"> Contact Us</Link></li>
                         </ul>
                 </div>
             </div>
