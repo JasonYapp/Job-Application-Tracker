@@ -112,7 +112,7 @@ const SignUp = () => {
             if (response.ok) {
                 // Success - account created
                 console.log('Account created successfully:', data);
-                navigate('/login');
+                navigate('/options');
             } else {
                 // Handle errors from backend
                 setError(data.message || 'Invalid OTP');
