@@ -9,7 +9,6 @@ export default [
     route("signup", "routes/signup.tsx"),
     route("forgotpassword", "routes/forgotpassword.tsx"),
     route("inprogress", "routes/inprogress.tsx"),
-    route("options", "routes/options.tsx"),
     // Add more public routes here. ONLY PUBLIC
   ]),
 
