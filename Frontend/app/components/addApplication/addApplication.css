@@ -44,9 +44,9 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative;
     width: 90%;
-    max-width: 500px; /* Prevent it from getting too wide */
-    max-height: 90vh; /* Prevent it from getting too tall */
-    overflow-y: auto; /* Allow scrolling if content is too tall */
+    max-width: 500px;
+    max-height: 90vh; 
+    overflow-y: auto; 
 }
 
 .popup-content h2 {
@@ -61,11 +61,12 @@
 .form {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Space between form elements */
+    gap: 20px; 
     margin-bottom: 20px;
 }
 
-/* Style all form inputs and selects */
+
+
 .form input,
 .form select {
     padding: 12px;
@@ -75,6 +76,7 @@
     width: 100%;
     box-sizing: border-box;
     transition: border-color 0.3s ease;
+    color: #333;
 }
 
 .form input:focus,
@@ -91,8 +93,8 @@
   width: 100%;
   box-sizing: border-box;
   transition: border-color 0.3s ease;
-  resize: vertical; /* Allows user to resize height only */
-  min-height: 100px; /* Makes it noticeably larger than inputs */
+  resize: vertical; 
+  min-height: 100px; 
 }
 
 .additional-notes:focus {
