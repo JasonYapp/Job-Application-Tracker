@@ -36,6 +36,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
+  const [userName, setUserName]  = useState('');
+
   const fetchApplications = async () => {
     try {
       setLoading(true);
@@ -61,6 +63,36 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+
+
+  const fetchUser = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token'); 
+                                      
+      const response = await fetch('https://job-application-tracker-production-f608.up.railway.app/api/auth/FetchUser', {
+        method: 'GET', 
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch username');
+      }
+
+      const data = await response.json();
+      setUserName(data.firstname);
+
+    } catch (error) {
+      console.error('Error fetching username:', error);
+      setError('Failed to load users');
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   useEffect(() => {
     fetchApplications();
@@ -109,7 +141,7 @@ const Dashboard = () => {
       <div className="dashboard-grid">
         
         <section className="dashboard-title">
-          <h1>Hey there, welcome to your dashboard!</h1>
+          <h1>Hey {userName || 'User'}, welcome to your dashboard!</h1>
         </section>
 
         <section className="stats-section">

@@ -999,6 +999,51 @@ app.delete('/api/auth/DeleteTask/:taskID', async (req, res) => {
 
 
 
+app.get('/api/auth/FetchUser', async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token){
+            return res.status(401).json({message:'No token provided'});
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.userId;
+        
+        const connection = await mysql.createConnection(dbConfig);
+        
+        const [result] = await connection.execute(
+            `SELECT first_name FROM users WHERE user_id = ?`,
+            [userId]
+        );
+
+        await connection.end();
+
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({
+            success: true,
+            firstname: result[0].first_name 
+        });
+
+    } catch (error) {
+        console.error('Error fetching user:', error);
+
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+
+        res.status(500).json({ 
+            message: 'Internal server error',
+            details: error.message 
+        });
+    }
+});
+
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
