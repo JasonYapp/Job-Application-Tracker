@@ -1013,7 +1013,7 @@ app.get('/api/auth/FetchUser', async (req, res) => {
         const connection = await mysql.createConnection(dbConfig);
         
         const [result] = await connection.execute(
-            `SELECT first_name FROM users WHERE user_id = ?`,
+            `SELECT first_name FROM users WHERE id = ?`,
             [userId]
         );
 
