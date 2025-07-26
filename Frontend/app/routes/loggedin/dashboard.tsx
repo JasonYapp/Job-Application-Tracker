@@ -96,6 +96,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchApplications();
+    fetchUser();
   }, []);
 
 
